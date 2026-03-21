@@ -716,8 +716,8 @@ function exploreTintShade(hex,dotIdx){
   document.querySelectorAll('.ts-dot').forEach((d,i)=>d.classList.toggle('active',i===dotIdx));
   document.getElementById('tsPicker').style.background=hex;
   const[h,s,l]=hexToHsl(hex);
-  const tints=Array.from({length:10},(_,i)=>hslToHex(h,s,Math.min(96,l+((96-l)*(i+1)/10)));
-  const shades=Array.from({length:10},(_,i)=>hslToHex(h,s,Math.max(4,l-((l-4)*(i+1)/10)));
+  const tints=Array.from({length:10},(_,i)=>hslToHex(h,s,Math.min(96,l+((96-l)*(i+1)/10))));
+  const shades=Array.from({length:10},(_,i)=>hslToHex(h,s,Math.max(4,l-((l-4)*(i+1)/10))));
   document.getElementById('tsOutput').innerHTML=`
     <div class="ts-section">
       <div class="ts-section-title">Tints (lighter)</div>
