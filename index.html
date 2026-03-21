@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Palettify v3 — Thunder Technology</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --base:#f3e8ff;--p1:#c084fc;--p2:#a855f7;--p3:#7c3aed;
+  --deep:#4c1d95;--ink:#1e0a3c;--muted:#9170b8;
+  --border:rgba(160,90,220,0.15);--shadow:rgba(124,58,237,0.12);
+  --card:rgba(255,255,255,0.62);
+}
+html{scroll-behavior:smooth}
+body{background:var(--base);color:var(--ink);font-family:'Outfit',sans-serif;min-height:100vh;overflow-x:hidden}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.02'/%3E%3C/svg%3E");pointer-events:none;z-index:1000}
+.bg-mesh{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.28;animation:floatBlob 14s ease-in-out infinite alternate}
+.b1{width:520px;height:520px;background:#dab4fd;top:-140px;left:-110px;animation-delay:0s}
+.b2{width:420px;height:420px;background:#c084fc;top:45%;right:-90px;animation-delay:-5s}
+.b3{width:360px;height:360px;background:#ede9fe;bottom:8%;left:35%;animation-delay:-9s}
+@keyframes floatBlob{0%{transform:translate(0,0) scale(1)}100%{transform:translate(28px,18px) scale(1.07)}}
+.page-wrap{position:relative;z-index:1;display:flex;flex-direction:column;min-height:100vh}
+
+/* NAV */
+nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 2.4rem;background:rgba(243,232,255,.78);backdrop-filter:blur(18px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200;animation:slideDown .6s ease both}
+@keyframes slideDown{from{opacity:0;transform:translateY(-18px)}to{opacity:1;transform:translateY(0)}}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:700;color:var(--deep);letter-spacing:-.02em;line-height:1}
+.nav-logo span{color:var(--p2);font-style:italic}
+.nav-by{font-family:'DM Mono',monospace;font-size:.55rem;color:var(--muted);letter-spacing:.16em;text-transform:uppercase;margin-top:2px}
+.nav-socials{display:flex;gap:.6rem;align-items:center}
+.soc-btn{display:inline-flex;align-items:center;gap:.4rem;padding:.42rem .95rem;border-radius:30px;font-family:'Outfit',sans-serif;font-size:.76rem;font-weight:600;text-decoration:none;border:none;cursor:pointer;transition:all .22s;white-space:nowrap}
+.yt-btn{background:#fff0f0;color:#cc0000;border:1.5px solid rgba(255,0,0,.18)}
+.yt-btn:hover{background:#f00;color:#fff;transform:translateY(-2px);box-shadow:0 6px 18px rgba(255,0,0,.28)}
+.ig-btn{background:#fff0fb;color:#dd2a7b;border:1.5px solid rgba(221,42,123,.18);position:relative;overflow:hidden}
+.ig-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,#f58529,#dd2a7b,#8134af);opacity:0;transition:opacity .22s}
+.ig-btn:hover::before{opacity:1}
+.ig-btn:hover{color:#fff;transform:translateY(-2px)}
+.ig-btn>*{position:relative;z-index:1}
+.icon{width:14px;height:14px;fill:currentColor;flex-shrink:0}
+
+/* MAIN */
+main{flex:1;max-width:980px;margin:0 auto;padding:2.8rem 1.8rem 5rem;width:100%}
+
+/* HERO */
+.hero{text-align:center;margin-bottom:2rem;animation:fadeUp .7s .1s ease both}
+.eyebrow{font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--p2);margin-bottom:.8rem;display:flex;align-items:center;justify-content:center;gap:.5rem}
+.eyebrow::before,.eyebrow::after{content:'';width:28px;height:1px;background:var(--p1);opacity:.5}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,5.5vw,3.8rem);font-weight:700;line-height:1.1;letter-spacing:-.02em;margin-bottom:.6rem}
+.hero h1 em{font-style:italic;color:var(--p2)}
+.hero p{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--muted);letter-spacing:.06em}
+
+/* VERSION BADGE */
+.v-badge{display:inline-flex;align-items:center;gap:.4rem;background:linear-gradient(135deg,var(--p2),var(--p3));color:#fff;border-radius:20px;padding:.22rem .9rem;font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;margin-bottom:1rem}
+
+/* TABS */
+.tabs{display:flex;gap:.35rem;margin-bottom:1.6rem;background:rgba(255,255,255,.45);border:1px solid var(--border);border-radius:16px;padding:.32rem;animation:fadeUp .7s .15s ease both;flex-wrap:wrap}
+.tab-btn{flex:1;min-width:90px;padding:.58rem .7rem;border:none;background:none;border-radius:11px;font-family:'Outfit',sans-serif;font-size:.76rem;font-weight:600;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap;display:flex;align-items:center;justify-content:center;gap:.35rem}
+.tab-btn.active{background:#fff;color:var(--deep);box-shadow:0 2px 12px var(--shadow)}
+.tab-btn:hover:not(.active){color:var(--p3)}
+.tab-content{display:none}.tab-content.active{display:block;animation:fadeUp .4s ease both}
+
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--border);border-radius:22px;padding:2rem 2.2rem;margin-bottom:1.6rem;backdrop-filter:blur(18px);box-shadow:0 4px 36px var(--shadow);position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:-50px;right:-50px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(192,132,252,.12) 0%,transparent 70%)}
+.field-label{font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem;display:block}
+.input-row{display:flex;align-items:center;gap:.9rem;flex-wrap:wrap}
+
+/* CIRCLE + HEX */
+.circle-wrap{position:relative;width:56px;height:56px;flex-shrink:0}
+.circle-wrap input[type=color]{position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer;z-index:2}
+.circle-face{width:56px;height:56px;border-radius:50%;border:3px solid rgba(124,58,237,.22);transition:transform .2s,box-shadow .3s;pointer-events:none}
+.circle-wrap:hover .circle-face{transform:scale(1.1)}
+.circle-edit{position:absolute;bottom:-1px;right:-1px;width:19px;height:19px;background:#fff;border:1.5px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--p2);pointer-events:none;z-index:3}
+.hex-wrap{display:flex;align-items:center;background:rgba(243,232,255,.6);border:1.5px solid var(--border);border-radius:13px;padding:0 .9rem;height:50px;gap:.35rem;transition:border-color .2s,box-shadow .2s}
+.hex-wrap:focus-within{border-color:var(--p1);box-shadow:0 0 0 4px rgba(192,132,252,.16)}
+.hex-hash{font-family:'DM Mono',monospace;font-size:.95rem;color:var(--p1);font-weight:500}
+.hex-input{font-family:'DM Mono',monospace;font-size:.95rem;background:none;border:none;color:var(--deep);outline:none;width:86px;letter-spacing:.1em;text-transform:uppercase;font-weight:500}
+.hex-input::placeholder{color:var(--muted);opacity:.55}
+
+/* BUTTONS */
+.gen-btn{background:linear-gradient(135deg,var(--p2),var(--p3));color:#fff;border:none;border-radius:13px;padding:0 1.8rem;height:50px;font-family:'Outfit',sans-serif;font-size:.85rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;transition:all .22s;box-shadow:0 4px 18px rgba(124,58,237,.3);white-space:nowrap}
+.gen-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(124,58,237,.4)}
+.rand-btn{background:rgba(255,255,255,.7);color:var(--p2);border:1.5px solid var(--border);border-radius:13px;padding:0 1.1rem;height:50px;font-family:'DM Mono',monospace;font-size:.73rem;letter-spacing:.1em;cursor:pointer;transition:all .2s;white-space:nowrap}
+.rand-btn:hover{border-color:var(--p1);background:rgba(243,232,255,.9);color:var(--deep)}
+.act-btn{display:inline-flex;align-items:center;gap:.38rem;padding:.48rem 1rem;border-radius:11px;font-family:'Outfit',sans-serif;font-size:.78rem;font-weight:600;cursor:pointer;transition:all .2s;border:1.5px solid var(--border);background:rgba(255,255,255,.7);color:var(--p3);white-space:nowrap}
+.act-btn:hover{background:#fff;border-color:var(--p1);box-shadow:0 4px 14px var(--shadow);transform:translateY(-1px)}
+.act-btn.primary{background:linear-gradient(135deg,var(--p2),var(--p3));color:#fff;border-color:transparent;box-shadow:0 4px 14px rgba(124,58,237,.25)}
+.act-btn.primary:hover{box-shadow:0 8px 24px rgba(124,58,237,.38)}
+.act-btn.ghost{background:transparent;color:var(--muted);border-color:var(--border)}
+.act-btn.ghost:hover{color:var(--p3);border-color:var(--p1);background:rgba(255,255,255,.5)}
+
+/* SWATCHES */
+.swatches{display:grid;grid-template-columns:repeat(5,1fr);border-radius:18px;overflow:hidden;height:250px;box-shadow:0 14px 46px rgba(76,29,149,.14),0 2px 8px rgba(0,0,0,.06)}
+.swatch{position:relative;cursor:pointer;transition:flex .38s cubic-bezier(.34,1.56,.64,1);overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;padding:.9rem .8rem}
+.swatch:hover{flex:2}
+.swatch-info{opacity:0;transform:translateY(8px);transition:all .25s}
+.swatch:hover .swatch-info{opacity:1;transform:translateY(0)}
+.swatch-hex{font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.12em;font-weight:500;margin-bottom:.12rem}
+.swatch-lbl{font-size:.58rem;opacity:.65;font-family:'DM Mono',monospace}
+.copy-badge{position:absolute;top:.6rem;right:.6rem;background:rgba(0,0,0,.22);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:.16rem .5rem;font-family:'DM Mono',monospace;font-size:.56rem;color:#fff;opacity:0;transition:opacity .2s}
+.swatch:hover .copy-badge{opacity:1}
+.info-dot{position:absolute;bottom:.6rem;left:.6rem;width:20px;height:20px;background:rgba(0,0,0,.22);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;opacity:0;transition:opacity .2s;cursor:pointer}
+.swatch:hover .info-dot{opacity:1}
+
+/* DOT ROW */
+.dot-row{display:grid;grid-template-columns:repeat(5,1fr);gap:.7rem;margin:1.1rem 0}
+.dot-item{display:flex;flex-direction:column;align-items:center;gap:.4rem;cursor:pointer;transition:transform .2s}
+.dot-item:hover{transform:translateY(-4px)}
+.dot-circle{width:36px;height:36px;border-radius:50%;border:2.5px solid rgba(124,58,237,.12);box-shadow:0 4px 14px rgba(0,0,0,.1)}
+.dot-hex{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.1em;color:var(--muted);text-align:center}
+
+/* PALETTE NAME */
+.palette-name-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.1rem;flex-wrap:wrap;gap:.7rem}
+.palette-name{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:700;color:var(--deep);font-style:italic;display:flex;align-items:center;gap:.5rem;min-height:1.8rem}
+.name-loading{font-size:.72rem;color:var(--muted);font-family:'DM Mono',monospace;font-style:normal;letter-spacing:.1em;animation:pulse 1.2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
+.mode-row{display:flex;gap:.35rem;flex-wrap:wrap}
+.mode-btn{background:rgba(255,255,255,.6);border:1.5px solid var(--border);color:var(--muted);border-radius:30px;padding:.28rem .85rem;font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:all .18s}
+.mode-btn.active,.mode-btn:hover{background:#fff;border-color:var(--p1);color:var(--p3);box-shadow:0 2px 10px rgba(168,85,247,.14)}
+
+/* ACTION BAR */
+.action-bar{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin-top:.8rem}
+.export-wrap{position:relative}
+.export-menu{position:absolute;top:calc(100% + 7px);left:0;background:#fff;border:1.5px solid var(--border);border-radius:14px;box-shadow:0 12px 36px var(--shadow);min-width:148px;z-index:50;animation:dropIn .2s ease both;display:none}
+.export-menu.open{display:block}
+@keyframes dropIn{from{opacity:0;transform:translateY(-7px)}to{opacity:1;transform:translateY(0)}}
+.exp-item{display:flex;align-items:center;gap:.55rem;padding:.72rem 1rem;font-family:'Outfit',sans-serif;font-size:.8rem;font-weight:500;color:var(--ink);cursor:pointer;transition:background .15s;border:none;background:none;width:100%;text-align:left}
+.exp-item:hover{background:rgba(168,85,247,.07);color:var(--p3)}
+
+/* CHIPS */
+.chips{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.8rem}
+.chip{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;padding:.2rem .7rem;border-radius:20px;border:1px solid rgba(168,85,247,.2);color:var(--p2);background:rgba(168,85,247,.06)}
+
+/* ════ TINT & SHADE EXPLORER ════ */
+.ts-trigger-row{display:flex;align-items:center;gap:.8rem;margin-bottom:1.4rem;flex-wrap:wrap}
+.ts-picker{width:52px;height:52px;border-radius:50%;border:3px solid rgba(124,58,237,.2);cursor:pointer;transition:transform .2s,box-shadow .3s;flex-shrink:0}
+.ts-picker:hover{transform:scale(1.1);box-shadow:0 0 0 8px rgba(168,85,247,.1)}
+.ts-or{font-family:'DM Mono',monospace;font-size:.65rem;color:var(--muted);letter-spacing:.12em}
+.ts-current-label{font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
+.ts-palette-dots{display:flex;gap:.5rem;flex-wrap:wrap}
+.ts-dot{width:34px;height:34px;border-radius:50%;border:2.5px solid rgba(124,58,237,.12);cursor:pointer;transition:transform .2s,box-shadow .2s}
+.ts-dot:hover,.ts-dot.active{transform:scale(1.18);box-shadow:0 0 0 4px rgba(168,85,247,.2)}
+.ts-section{margin-bottom:1.6rem}
+.ts-section-title{font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:.8rem;display:flex;align-items:center;gap:.5rem}
+.ts-section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+.ts-row{display:grid;grid-template-columns:repeat(10,1fr);gap:0;border-radius:14px;overflow:hidden;height:80px}
+.ts-swatch{cursor:pointer;display:flex;flex-direction:column;justify-content:flex-end;padding:.4rem .3rem;transition:flex .3s cubic-bezier(.34,1.56,.64,1)}
+.ts-swatch:hover{flex:2}
+.ts-swatch-hex{font-family:'DM Mono',monospace;font-size:.5rem;letter-spacing:.06em;opacity:0;transition:opacity .2s;white-space:nowrap}
+.ts-swatch:hover .ts-swatch-hex{opacity:1}
+.ts-empty{text-align:center;padding:3rem 2rem;font-family:'DM Mono',monospace;font-size:.75rem;color:var(--muted);letter-spacing:.1em}
+
+/* ════ COLOUR BLINDNESS ════ */
+.cvd-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.2rem}
+.cvd-card{background:rgba(255,255,255,.55);border:1px solid var(--border);border-radius:18px;overflow:hidden;backdrop-filter:blur(14px)}
+.cvd-label-bar{padding:.7rem 1rem;display:flex;align-items:center;justify-content:space-between}
+.cvd-label{font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
+.cvd-desc{font-family:'DM Mono',monospace;font-size:.58rem;color:var(--muted);opacity:.7}
+.cvd-swatches{display:flex;height:70px}
+.cvd-swatch{flex:1}
+.cvd-empty{text-align:center;padding:3rem;font-family:'DM Mono',monospace;font-size:.75rem;color:var(--muted)}
+
+/* ════ CUSTOM PALETTE BUILDER ════ */
+.builder-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:.8rem;margin-bottom:1.4rem}
+.builder-slot{display:flex;flex-direction:column;align-items:center;gap:.5rem}
+.builder-circle-wrap{position:relative;width:56px;height:56px}
+.builder-circle-wrap input[type=color]{position:absolute;inset:0;opacity:0;cursor:pointer;z-index:2;width:100%;height:100%}
+.builder-circle-face{width:56px;height:56px;border-radius:50%;border:3px solid rgba(124,58,237,.2);transition:transform .2s;pointer-events:none}
+.builder-circle-wrap:hover .builder-circle-face{transform:scale(1.08)}
+.builder-hex-mini{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.08em;color:var(--muted);text-align:center;text-transform:uppercase}
+.builder-preview{display:flex;border-radius:16px;overflow:hidden;height:110px;margin-bottom:1.2rem;box-shadow:0 8px 30px var(--shadow)}
+.builder-preview-swatch{flex:1}
+.builder-actions{display:flex;gap:.7rem;flex-wrap:wrap}
+
+/* ════ PALETTE MIXER ════ */
+.mixer-row{display:grid;grid-template-columns:1fr auto 1fr;gap:1rem;align-items:center;margin-bottom:1.4rem}
+.mixer-select{background:rgba(255,255,255,.7);border:1.5px solid var(--border);border-radius:13px;padding:.6rem 1rem;font-family:'DM Mono',monospace;font-size:.75rem;color:var(--deep);outline:none;cursor:pointer;width:100%;transition:border-color .2s}
+.mixer-select:focus{border-color:var(--p1)}
+.mixer-plus{font-size:1.5rem;color:var(--p2);text-align:center;font-weight:700}
+.mixer-preview{border-radius:16px;overflow:hidden;display:flex;height:80px;margin-bottom:1.2rem;box-shadow:0 6px 24px var(--shadow)}
+.mixer-swatch{flex:1}
+.mini-palette{display:flex;gap:0;border-radius:10px;overflow:hidden;height:36px;margin-top:.5rem}
+.mini-swatch{flex:1}
+.mixer-label{font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem}
+.mixer-blend-row{display:flex;align-items:center;gap:.8rem;margin-bottom:1rem;flex-wrap:wrap}
+.blend-label{font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+input[type=range]{-webkit-appearance:none;height:4px;border-radius:2px;background:linear-gradient(90deg,var(--p2),var(--p1));width:160px;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--p2);border:2px solid #fff;box-shadow:0 2px 6px rgba(124,58,237,.3)}
+.mixer-empty{text-align:center;padding:2.5rem;font-family:'DM Mono',monospace;font-size:.72rem;color:var(--muted)}
+
+/* ════ FONT PAIRING ════ */
+.font-gen-bar{display:flex;align-items:center;gap:.8rem;margin-bottom:1.4rem;flex-wrap:wrap}
+.font-mood-select{background:rgba(255,255,255,.7);border:1.5px solid var(--border);border-radius:13px;padding:.6rem 1rem;font-family:'DM Mono',monospace;font-size:.75rem;color:var(--deep);outline:none;cursor:pointer;transition:border-color .2s}
+.font-mood-select:focus{border-color:var(--p1)}
+.font-loading{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--muted);letter-spacing:.1em;animation:pulse 1.2s ease-in-out infinite;display:none}
+.font-pairs{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.2rem}
+.font-card{background:rgba(255,255,255,.6);border:1px solid var(--border);border-radius:18px;padding:1.4rem 1.6rem;backdrop-filter:blur(14px);transition:all .2s}
+.font-card:hover{transform:translateY(-3px);box-shadow:0 10px 32px var(--shadow);border-color:var(--p1)}
+.font-pair-names{display:flex;gap:.5rem;align-items:center;margin-bottom:.8rem;flex-wrap:wrap}
+.font-name{font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;padding:.18rem .6rem;border-radius:20px;border:1px solid rgba(168,85,247,.22);color:var(--p2);background:rgba(168,85,247,.07)}
+.font-pair-plus{color:var(--muted);font-size:.8rem}
+.font-demo-head{font-size:1.5rem;font-weight:700;color:var(--deep);margin-bottom:.3rem;line-height:1.2}
+.font-demo-body{font-size:.85rem;color:var(--muted);line-height:1.6}
+.font-mood-tag{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:.7rem}
+.font-empty{text-align:center;padding:3rem;font-family:'DM Mono',monospace;font-size:.75rem;color:var(--muted)}
+
+/* ════ WALLPAPER ════ */
+#wallpaperCanvas{width:100%;border-radius:20px;box-shadow:0 16px 50px rgba(76,29,149,.2);display:block;cursor:pointer}
+.wallpaper-controls{display:flex;align-items:center;gap:.8rem;margin-bottom:1.2rem;flex-wrap:wrap}
+.wl-select{background:rgba(255,255,255,.7);border:1.5px solid var(--border);border-radius:13px;padding:.5rem .9rem;font-family:'DM Mono',monospace;font-size:.72rem;color:var(--deep);outline:none;cursor:pointer}
+.wl-label{font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.wl-note{font-family:'DM Mono',monospace;font-size:.65rem;color:var(--muted);letter-spacing:.08em;margin-top:.8rem;text-align:center}
+
+/* IMAGE EXTRACT */
+.upload-zone{background:var(--card);border:2px dashed var(--p1);border-radius:22px;padding:3rem 2rem;text-align:center;cursor:pointer;transition:all .2s;backdrop-filter:blur(14px);position:relative;overflow:hidden}
+.upload-zone:hover,.upload-zone.drag-over{border-color:var(--p2);background:rgba(255,255,255,.8);box-shadow:0 0 0 6px rgba(168,85,247,.1)}
+.upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;z-index:2}
+.upload-icon{font-size:2.4rem;margin-bottom:.7rem;display:block}
+.upload-title{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:700;color:var(--deep);margin-bottom:.35rem}
+.upload-sub{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--muted);letter-spacing:.1em}
+.upload-preview{display:none;margin-top:1.4rem}
+.upload-preview img{max-height:190px;border-radius:14px;box-shadow:0 8px 28px rgba(0,0,0,.12);object-fit:cover;max-width:100%}
+.extract-result{margin-top:1.8rem;display:none}
+.extract-swatches{display:grid;grid-template-columns:repeat(5,1fr);border-radius:14px;overflow:hidden;height:110px;box-shadow:0 8px 28px rgba(76,29,149,.12);cursor:pointer}
+.extract-swatch{display:flex;align-items:flex-end;padding:.5rem .55rem;transition:flex .3s}
+.extract-swatch:hover{flex:2}
+.extract-hex{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.08em;opacity:0;transition:opacity .2s;font-weight:500}
+.extract-swatch:hover .extract-hex{opacity:1}
+
+/* SAVED */
+.saved-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.3rem}
+.saved-count{font-family:'DM Mono',monospace;font-size:.63rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
+.clear-btn{font-family:'DM Mono',monospace;font-size:.63rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);background:none;border:1px solid var(--border);border-radius:20px;padding:.22rem .75rem;cursor:pointer;transition:all .2s}
+.clear-btn:hover{border-color:#f87171;color:#ef4444}
+.saved-empty{text-align:center;padding:4rem 2rem;font-family:'DM Mono',monospace;font-size:.76rem;color:var(--muted);letter-spacing:.1em}
+.saved-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1.1rem}
+.saved-card{background:var(--card);border:1px solid var(--border);border-radius:17px;overflow:hidden;backdrop-filter:blur(14px);box-shadow:0 4px 18px var(--shadow);transition:all .2s;cursor:pointer}
+.saved-card:hover{transform:translateY(-4px);box-shadow:0 12px 34px var(--shadow)}
+.saved-swatches{display:flex;height:75px}
+.saved-swatch{flex:1;transition:flex .3s}
+.saved-swatch:hover{flex:1.5}
+.saved-info{padding:.85rem .95rem}
+.saved-name{font-family:'Cormorant Garamond',serif;font-size:.95rem;font-weight:700;color:var(--deep);font-style:italic;margin-bottom:.2rem}
+.saved-meta{display:flex;justify-content:space-between;align-items:center}
+.saved-date{font-family:'DM Mono',monospace;font-size:.56rem;color:var(--muted)}
+.saved-actions{display:flex;gap:.3rem}
+.saved-act{font-size:.65rem;background:none;border:none;cursor:pointer;color:var(--muted);padding:.18rem .38rem;border-radius:6px;transition:all .15s;font-family:'DM Mono',monospace}
+.saved-act:hover{color:var(--p3);background:rgba(168,85,247,.1)}
+.saved-act.del:hover{color:#ef4444;background:rgba(239,68,68,.1)}
+
+/* COLOUR INFO MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(30,10,60,.45);backdrop-filter:blur(8px);z-index:500;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.info-panel{background:var(--base);border:1px solid var(--border);border-radius:26px 26px 0 0;padding:1.8rem 2.2rem 2.2rem;width:100%;max-width:540px;transform:translateY(100%);transition:transform .35s cubic-bezier(.34,1.28,.64,1);box-shadow:0 -14px 56px rgba(76,29,149,.2)}
+.modal-overlay.open .info-panel{transform:translateY(0)}
+.info-drag{width:38px;height:4px;background:var(--p1);border-radius:2px;margin:0 auto 1.4rem;opacity:.4}
+.info-swatch-big{width:76px;height:76px;border-radius:18px;margin:0 auto 1.1rem;box-shadow:0 8px 28px rgba(0,0,0,.14)}
+.info-title{font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:700;color:var(--deep);text-align:center;margin-bottom:1.4rem;font-style:italic}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+.info-row{background:rgba(255,255,255,.6);border:1px solid var(--border);border-radius:13px;padding:.85rem 1rem;cursor:pointer;transition:all .18s}
+.info-row:hover{background:#fff;border-color:var(--p1);box-shadow:0 4px 12px var(--shadow)}
+.info-row-label{font-family:'DM Mono',monospace;font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:.28rem}
+.info-row-val{font-family:'DM Mono',monospace;font-size:.84rem;font-weight:500;color:var(--deep)}
+.info-close{display:block;margin:1.4rem auto 0;background:var(--p2);color:#fff;border:none;border-radius:30px;padding:.55rem 1.8rem;font-family:'Outfit',sans-serif;font-size:.8rem;font-weight:700;cursor:pointer;transition:all .2s}
+.info-close:hover{background:var(--p3)}
+
+/* PREVIEW MODAL */
+.preview-overlay{position:fixed;inset:0;background:rgba(20,5,40,.72);backdrop-filter:blur(10px);z-index:600;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .3s}
+.preview-overlay.open{opacity:1;pointer-events:all}
+.preview-bar{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.6rem;background:rgba(243,232,255,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}
+.preview-bar-title{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:700;color:var(--deep);font-style:italic}
+.preview-close{background:var(--p2);color:#fff;border:none;border-radius:20px;padding:.38rem 1.1rem;font-family:'Outfit',sans-serif;font-size:.76rem;font-weight:700;cursor:pointer;transition:background .2s}
+.preview-close:hover{background:var(--p3)}
+.preview-frame{flex:1;overflow-y:auto}
+.prev-nav{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 3rem;position:sticky;top:0;z-index:10}
+.prev-nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:700;font-style:italic}
+.prev-nav-links{display:flex;gap:1.4rem;font-size:.82rem;font-weight:500}
+.prev-nav-cta{padding:.42rem 1.1rem;border-radius:20px;font-size:.8rem;font-weight:700;border:none;cursor:pointer}
+.prev-hero{padding:6rem 3rem 4.5rem;text-align:center}
+.prev-hero h2{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,5.5vw,4rem);font-weight:700;letter-spacing:-.02em;line-height:1.1;margin-bottom:1rem}
+.prev-hero p{font-size:1rem;max-width:480px;margin:0 auto 1.8rem;opacity:.75}
+.prev-btns{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap}
+.prev-btn{padding:.75rem 1.9rem;border-radius:30px;font-size:.88rem;font-weight:700;cursor:pointer;border:none}
+.prev-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1.3rem;padding:2.5rem 3rem}
+.prev-card{border-radius:18px;padding:1.8rem}
+.prev-card h3{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;margin-bottom:.5rem}
+.prev-card p{font-size:.85rem;line-height:1.6;opacity:.75}
+.prev-cta{padding:3.5rem 3rem;text-align:center}
+.prev-cta h3{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700;margin-bottom:.7rem}
+.prev-cta p{font-size:.9rem;margin-bottom:1.8rem;opacity:.75}
+@media(max-width:640px){.prev-cards{grid-template-columns:1fr;padding:1.5rem}.prev-nav{padding:1rem 1.2rem}}
+
+/* BOTTOM SOCIAL + FOOTER */
+.bottom-social{background:rgba(255,255,255,.55);border-top:1px solid var(--border);backdrop-filter:blur(14px);padding:1.3rem 2.4rem;display:flex;align-items:center;justify-content:center;gap:.9rem;flex-wrap:wrap}
+.bottom-label{font-family:'DM Mono',monospace;font-size:.66rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
+footer{background:rgba(228,209,250,.6);border-top:1px solid var(--border);text-align:center;padding:1.3rem 2rem}
+.footer-inner{display:flex;flex-direction:column;align-items:center;gap:.4rem}
+.footer-logo{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;color:var(--deep)}
+.footer-logo span{color:var(--p2);font-style:italic}
+.footer-divider{width:38px;height:1px;background:linear-gradient(90deg,transparent,var(--p1),transparent);margin:.18rem auto}
+.footer-copy{font-family:'DM Mono',monospace;font-size:.58rem;color:var(--muted);letter-spacing:.1em}
+.footer-copy a{color:var(--p2);text-decoration:none;font-weight:500}
+.footer-copy a:hover{text-decoration:underline}
+
+/* TOAST */
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(20px);background:rgba(76,29,149,.92);backdrop-filter:blur(12px);border:1px solid rgba(168,85,247,.3);border-radius:30px;padding:.6rem 1.4rem;font-family:'DM Mono',monospace;font-size:.73rem;letter-spacing:.1em;color:#f3e8ff;opacity:0;transition:all .3s;z-index:1100;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:640px){
+  nav{padding:.9rem 1.1rem}.nav-socials{gap:.4rem}.soc-btn{padding:.36rem .65rem;font-size:.72rem}
+  main{padding:2rem 1rem 3.5rem}.card{padding:1.5rem 1.3rem}
+  .swatches{height:190px}.tabs{gap:.25rem}.builder-grid{grid-template-columns:repeat(5,1fr);gap:.5rem}
+  .mixer-row{grid-template-columns:1fr;gap:.6rem}.mixer-plus{display:none}
+  .info-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="bg-mesh" aria-hidden="true">
+  <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+</div>
+
+<div class="page-wrap">
+
+<!-- NAV -->
+<nav>
+  <div>
+    <div class="nav-logo">Palette<span>ify</span></div>
+    <div class="nav-by">by Thunder Technology</div>
+  </div>
+  <div class="nav-socials">
+    <a class="soc-btn yt-btn" href="https://www.youtube.com/@thundertechnologyofficial" target="_blank" rel="noopener">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+      YouTube
+    </a>
+    <a class="soc-btn ig-btn" href="https://www.instagram.com/thundertechnologyofficial" target="_blank" rel="noopener">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+      <span>Instagram</span>
+    </a>
+  </div>
+</nav>
+
+<main>
+  <div class="hero">
+    <div class="eyebrow">⚡ Thunder Technology</div>
+    <div class="v-badge">✦ Version 3.0</div>
+    <h1>One colour.<br><em>Infinite possibilities.</em></h1>
+    <p>Generate · Extract · Explore · Mix · Build · Animate · Preview</p>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab-btn active"  onclick="switchTab('generate',this)">🎨 Generate</button>
+    <button class="tab-btn" onclick="switchTab('tintshade',this)">🎭 Tints & Shades</button>
+    <button class="tab-btn" onclick="switchTab('blindness',this)">👁 Blindness Sim</button>
+    <button class="tab-btn" onclick="switchTab('build',this)">✏️ Custom Build</button>
+    <button class="tab-btn" onclick="switchTab('mixer',this)">🔀 Mixer</button>
+    <button class="tab-btn" onclick="switchTab('fonts',this)">🔤 Font Pairs</button>
+    <button class="tab-btn" onclick="switchTab('wallpaper',this)">🌊 Wallpaper</button>
+    <button class="tab-btn" onclick="switchTab('extract',this)">🖼 Extract</button>
+    <button class="tab-btn" onclick="switchTab('saved',this)">💾 Saved <span id="savedBadge" style="display:none;background:var(--p2);color:#fff;border-radius:20px;padding:.08rem .45rem;font-size:.6rem;margin-left:.2rem"></span></button>
+  </div>
+
+  <!-- ══════════════════ GENERATE ══════════════════ -->
+  <div class="tab-content active" id="tab-generate">
+    <div class="card">
+      <span class="field-label">Base Colour</span>
+      <div class="input-row">
+        <div class="circle-wrap">
+          <input type="color" id="colorPicker" value="#a855f7">
+          <div class="circle-face" id="circleFace"></div>
+          <div class="circle-edit">✎</div>
+        </div>
+        <div class="hex-wrap">
+          <span class="hex-hash">#</span>
+          <input type="text" class="hex-input" id="hexInput" value="A855F7" maxlength="6" placeholder="A855F7">
+        </div>
+        <button class="gen-btn" onclick="generate()">Generate Palette</button>
+        <button class="rand-btn" onclick="randomColor()">↺ Random</button>
+      </div>
+    </div>
+
+    <div class="palette-name-bar">
+      <div class="palette-name">
+        <span id="nameText">—</span>
+        <span class="name-loading" id="nameLoading" style="display:none">naming…</span>
+      </div>
+      <div class="mode-row">
+        <button class="mode-btn active" onclick="setMode('analogous',this)">Analogous</button>
+        <button class="mode-btn" onclick="setMode('complementary',this)">Complement</button>
+        <button class="mode-btn" onclick="setMode('triadic',this)">Triadic</button>
+        <button class="mode-btn" onclick="setMode('shades',this)">Shades</button>
+      </div>
+    </div>
+    <div class="swatches" id="swatches"></div>
+    <div class="dot-row" id="dotRow"></div>
+    <div class="action-bar">
+      <button class="act-btn primary" onclick="savePalette()">💾 Save</button>
+      <button class="act-btn" onclick="openPreview()">👁 Preview</button>
+      <div class="export-wrap">
+        <button class="act-btn" onclick="toggleExportMenu()" id="exportToggle">⬇ Export ▾</button>
+        <div class="export-menu" id="exportMenu">
+          <button class="exp-item" onclick="exportPNG()">🖼 PNG</button>
+          <button class="exp-item" onclick="exportCSS()">🎨 CSS Vars</button>
+          <button class="exp-item" onclick="exportJSON()">{ } JSON</button>
+          <button class="exp-item" onclick="exportTailwind()">🌬 Tailwind</button>
+        </div>
+      </div>
+    </div>
+    <div class="chips" id="chips"></div>
+  </div>
+
+  <!-- ══════════════════ TINT & SHADE ══════════════════ -->
+  <div class="tab-content" id="tab-tintshade">
+    <div class="card">
+      <span class="field-label">Select a Colour to Explore</span>
+      <div class="ts-trigger-row">
+        <div style="position:relative;flex-shrink:0">
+          <div class="ts-picker" id="tsPicker" style="background:#a855f7" onclick="document.getElementById('tsColorInput').click()"></div>
+          <input type="color" id="tsColorInput" value="#a855f7" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%">
+        </div>
+        <span class="ts-or">or pick from your palette:</span>
+        <div class="ts-palette-dots" id="tsPaletteDots"></div>
+      </div>
+      <div id="tsOutput">
+        <div class="ts-empty">Select a colour above to explore its tints and shades.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════ BLINDNESS SIM ══════════════════ -->
+  <div class="tab-content" id="tab-blindness">
+    <div class="card">
+      <span class="field-label">Colour Blindness Simulator</span>
+      <p style="font-family:'DM Mono',monospace;font-size:.7rem;color:var(--muted);letter-spacing:.06em;margin-bottom:1.4rem">See how your current palette appears to people with different types of colour vision deficiency.</p>
+      <div id="cvdGrid" class="cvd-grid">
+        <div class="cvd-empty">Generate a palette first to simulate colour blindness.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════ CUSTOM BUILD ══════════════════ -->
+  <div class="tab-content" id="tab-build">
+    <div class="card">
+      <span class="field-label">Build Your Own Palette — Pick 5 Colours</span>
+      <div class="builder-grid" id="builderGrid"></div>
+      <div class="builder-preview" id="builderPreview"></div>
+      <div class="builder-actions">
+        <button class="act-btn primary" onclick="useBuiltPalette()">→ Use this Palette</button>
+        <button class="act-btn" onclick="randomiseBuilder()">↺ Randomise All</button>
+        <button class="act-btn ghost" onclick="loadCurrentToBuilder()">⬇ Load Current</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════ MIXER ══════════════════ -->
+  <div class="tab-content" id="tab-mixer">
+    <div class="card">
+      <span class="field-label">Blend Two Saved Palettes</span>
+      <div id="mixerBody">
+        <div class="mixer-empty">Save at least 2 palettes to use the mixer.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════ FONT PAIRS ══════════════════ -->
+  <div class="tab-content" id="tab-fonts">
+    <div class="card">
+      <span class="field-label">AI Font Pairing Suggester</span>
+      <div class="font-gen-bar">
+        <select class="font-mood-select" id="fontMood">
+          <option value="auto">Auto (match palette mood)</option>
+          <option value="elegant">Elegant & Luxury</option>
+          <option value="modern">Modern & Minimal</option>
+          <option value="playful">Playful & Creative</option>
+          <option value="editorial">Editorial & Magazine</option>
+          <option value="tech">Tech & Digital</option>
+        </select>
+        <button class="act-btn primary" onclick="generateFontPairs()">✦ Suggest Font Pairs</button>
+        <span class="font-loading" id="fontLoading">AI thinking…</span>
+      </div>
+      <div id="fontPairsOutput">
+        <div class="font-empty">Hit "Suggest Font Pairs" to get AI-curated Google Font combinations that match your palette.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════ WALLPAPER ══════════════════ -->
+  <div class="tab-content" id="tab-wallpaper">
+    <div class="card">
+      <span class="field-label">Animated Gradient Wallpaper</span>
+      <div class="wallpaper-controls">
+        <span class="wl-label">Style:</span>
+        <select class="wl-select" id="wlStyle" onchange="restartWallpaper()">
+          <option value="blobs">Fluid Blobs</option>
+          <option value="waves">Wave Flow</option>
+          <option value="aurora">Aurora</option>
+          <option value="mesh">Mesh Gradient</option>
+        </select>
+        <span class="wl-label">Speed:</span>
+        <select class="wl-select" id="wlSpeed" onchange="restartWallpaper()">
+          <option value="slow">Slow</option>
+          <option value="normal" selected>Normal</option>
+          <option value="fast">Fast</option>
+        </select>
+        <button class="act-btn primary" onclick="downloadWallpaper()">⬇ Download PNG</button>
+      </div>
+      <canvas id="wallpaperCanvas" width="1200" height="675"></canvas>
+      <p class="wl-note">Based on your current palette · Click canvas to pause / resume</p>
+    </div>
+  </div>
+
+  <!-- ══════════════════ EXTRACT ══════════════════ -->
+  <div class="tab-content" id="tab-extract">
+    <div class="upload-zone" id="uploadZone">
+      <input type="file" id="imageFile" accept="image/*" onchange="handleImageUpload(this)">
+      <span class="upload-icon">🖼</span>
+      <div class="upload-title">Drop an image here</div>
+      <div class="upload-sub">or click to browse — JPG, PNG, WEBP, GIF</div>
+      <div class="upload-preview" id="uploadPreview">
+        <img id="uploadedImg" src="" alt="uploaded">
+      </div>
+    </div>
+    <div class="extract-result" id="extractResult">
+      <span class="field-label" style="margin-top:1.5rem;display:block">Extracted Colours</span>
+      <div class="extract-swatches" id="extractSwatches"></div>
+      <br>
+      <button class="act-btn primary" onclick="useExtractedPalette()" style="margin-top:.5rem">→ Use this Palette</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════ SAVED ══════════════════ -->
+  <div class="tab-content" id="tab-saved">
+    <div class="saved-header">
+      <span class="saved-count" id="savedCount">0 palettes</span>
+      <button class="clear-btn" onclick="clearAllSaved()">Clear All</button>
+    </div>
+    <div id="savedGrid" class="saved-grid"></div>
+    <div class="saved-empty" id="savedEmpty">No saved palettes yet.<br>Generate one and hit 💾 Save!</div>
+  </div>
+
+</main>
+
+<!-- BOTTOM SOCIAL -->
+<div class="bottom-social">
+  <span class="bottom-label">Follow Thunder Technology</span>
+  <a class="soc-btn yt-btn" href="https://www.youtube.com/@thundertechnologyofficial" target="_blank" rel="noopener">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+    @thundertechnologyofficial
+  </a>
+  <a class="soc-btn ig-btn" href="https://www.instagram.com/thundertechnologyofficial" target="_blank" rel="noopener">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+    <span>@thundertechnologyofficial</span>
+  </a>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">Thunder<span>Technology</span> × Palettify</div>
+    <div class="footer-divider"></div>
+    <div class="footer-copy">
+      &copy; <span id="yr"></span> ThunderTechnology &nbsp;·&nbsp;
+      <a href="https://www.youtube.com/@thundertechnologyofficial" target="_blank">YouTube</a> &nbsp;·&nbsp;
+      <a href="https://www.instagram.com/thundertechnologyofficial" target="_blank">Instagram</a> &nbsp;·&nbsp; All rights reserved.
+    </div>
+  </div>
+</footer>
+</div>
+
+<!-- COLOUR INFO MODAL -->
+<div class="modal-overlay" id="infoOverlay" onclick="if(event.target===this)closeInfo()">
+  <div class="info-panel">
+    <div class="info-drag"></div>
+    <div class="info-swatch-big" id="infoSwatchBig"></div>
+    <div class="info-title" id="infoTitle"></div>
+    <div class="info-grid">
+      <div class="info-row" onclick="copyVal(this)"><div class="info-row-label">HEX</div><div class="info-row-val" id="infoHex"></div></div>
+      <div class="info-row" onclick="copyVal(this)"><div class="info-row-label">RGB</div><div class="info-row-val" id="infoRGB"></div></div>
+      <div class="info-row" onclick="copyVal(this)"><div class="info-row-label">HSL</div><div class="info-row-val" id="infoHSL"></div></div>
+      <div class="info-row" onclick="copyVal(this)"><div class="info-row-label">CMYK</div><div class="info-row-val" id="infoCMYK"></div></div>
+    </div>
+    <button class="info-close" onclick="closeInfo()">Close</button>
+  </div>
+</div>
+
+<!-- PREVIEW MODAL -->
+<div class="preview-overlay" id="previewOverlay">
+  <div class="preview-bar">
+    <span class="preview-bar-title">Full Page Colour Preview</span>
+    <button class="preview-close" onclick="document.getElementById('previewOverlay').classList.remove('open')">✕ Close</button>
+  </div>
+  <div class="preview-frame"><div id="previewPage"></div></div>
+</div>
+
+<div class="toast" id="toast"></div>
+<canvas id="hiddenCanvas" style="display:none"></canvas>
+
+<script>
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+/* ════════════════ COLOUR MATH ════════════════ */
+function hexToRgb(hex){
+  return{r:parseInt(hex.slice(1,3),16),g:parseInt(hex.slice(3,5),16),b:parseInt(hex.slice(5,7),16)};
+}
+function hexToHsl(hex){
+  let{r,g,b}=hexToRgb(hex);r/=255;g/=255;b/=255;
+  const max=Math.max(r,g,b),min=Math.min(r,g,b);let h,s,l=(max+min)/2;
+  if(max===min){h=s=0;}else{
+    const d=max-min;s=l>.5?d/(2-max-min):d/(max+min);
+    switch(max){case r:h=(g-b)/d+(g<b?6:0);break;case g:h=(b-r)/d+2;break;case b:h=(r-g)/d+4;break;}
+    h/=6;
+  }
+  return[Math.round(h*360),Math.round(s*100),Math.round(l*100)];
+}
+function hslToHex(h,s,l){
+  h=((h%360)+360)%360;s/=100;l/=100;
+  const a=s*Math.min(l,1-l);
+  const f=n=>{const k=(n+h/30)%12,c=l-a*Math.max(Math.min(k-3,9-k,1),-1);return Math.round(255*c).toString(16).padStart(2,'0');};
+  return'#'+f(0)+f(8)+f(4);
+}
+function hexToCmyk(hex){
+  let{r,g,b}=hexToRgb(hex);r/=255;g/=255;b/=255;
+  const k=1-Math.max(r,g,b);
+  if(k===1)return{c:0,m:0,y:0,k:100};
+  return{c:Math.round((1-r-k)/(1-k)*100),m:Math.round((1-g-k)/(1-k)*100),y:Math.round((1-b-k)/(1-k)*100),k:Math.round(k*100)};
+}
+function textCol(hex){const[,,l]=hexToHsl(hex);return l>58?'#1e0a3c':'#ffffff';}
+function rgbToHex(r,g,b){return'#'+[r,g,b].map(v=>Math.min(255,Math.max(0,v)).toString(16).padStart(2,'0')).join('');}
+
+/* ════════════════ PALETTE GENERATORS ════════════════ */
+function getAnalogous(hex){const[h,s,l]=hexToHsl(hex);return[-40,-20,0,20,40].map(d=>hslToHex(h+d,Math.min(100,s+5),l));}
+function getComplementary(hex){const[h,s,l]=hexToHsl(hex);return[hslToHex(h,s,Math.min(88,l+30)),hslToHex(h,Math.min(100,s+8),l),hex,hslToHex(h+180,s,l),hslToHex(h+180,Math.min(100,s+8),Math.max(20,l-15))];}
+function getTriadic(hex){const[h,s,l]=hexToHsl(hex);return[hslToHex(h,s,Math.min(88,l+28)),hex,hslToHex(h+120,s,l),hslToHex(h+240,s,l),hslToHex(h+60,Math.max(18,s-18),Math.max(20,l-10))];}
+function getShades(hex){const[h,s]=hexToHsl(hex);return[88,72,56,40,24].map(l=>hslToHex(h,s,l));}
+function getPalette(hex,mode){switch(mode){case'complementary':return getComplementary(hex);case'triadic':return getTriadic(hex);case'shades':return getShades(hex);default:return getAnalogous(hex);}}
+const harmonyInfo={analogous:['Adjacent Hues','Serene','Cohesive'],complementary:['High Contrast','Dynamic','Bold'],triadic:['3-Point','Vibrant','Rich'],shades:['Monochromatic','Light → Dark','Elegant']};
+
+/* ════════════════ STATE ════════════════ */
+let currentHex='#a855f7', currentMode='analogous', currentColors=[], currentName='';
+let builderColors=['#a855f7','#c084fc','#7c3aed','#e879f9','#4c1d95'];
+let wallpaperPaused=false, wallpaperAnim=null;
+let extractedColors=[];
+
+/* ════════════════ AI PALETTE NAME ════════════════ */
+async function generatePaletteName(colors){
+  const nameEl=document.getElementById('nameText'),loadEl=document.getElementById('nameLoading');
+  nameEl.style.display='none';loadEl.style.display='inline';
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:40,
+        messages:[{role:'user',content:`Give a creative poetic 2-3 word name for a colour palette: ${colors.join(', ')}. Reply with ONLY the name, nothing else.`}]})});
+    const data=await res.json();
+    currentName=data.content?.[0]?.text?.trim()||'Unnamed Palette';
+  }catch{currentName='My Palette';}
+  nameEl.textContent=currentName;nameEl.style.display='inline';loadEl.style.display='none';
+}
+
+/* ════════════════ RENDER PALETTE ════════════════ */
+function render(colors){
+  currentColors=[...colors];
+  document.getElementById('swatches').innerHTML=colors.map((c,i)=>`
+    <div class="swatch" style="background:${c};color:${textCol(c)}" onclick="copyColor('${c}')">
+      <span class="copy-badge">Copy</span>
+      <div class="info-dot" onclick="openInfo(event,'${c}')">ℹ</div>
+      <div class="swatch-info"><div class="swatch-hex">#${c.slice(1).toUpperCase()}</div><div class="swatch-lbl">Tone ${i+1}</div></div>
+    </div>`).join('');
+  document.getElementById('dotRow').innerHTML=colors.map(c=>`
+    <div class="dot-item" onclick="openInfo(event,'${c}')">
+      <div class="dot-circle" style="background:${c}"></div>
+      <div class="dot-hex">#${c.slice(1).toUpperCase()}</div>
+    </div>`).join('');
+  document.getElementById('chips').innerHTML=(harmonyInfo[currentMode]||[]).map(t=>`<span class="chip">${t}</span>`).join('');
+  updateTsPaletteDots();
+  updateCVD();
+}
+
+function generate(){
+  const hex=currentHex.startsWith('#')?currentHex:'#'+currentHex;
+  if(!/^#[0-9A-Fa-f]{6}$/.test(hex))return;
+  const colors=getPalette(hex,currentMode);
+  render(colors);
+  generatePaletteName(colors);
+}
+
+function setMode(mode,btn){
+  currentMode=mode;
+  document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');generate();
+}
+
+const picker=document.getElementById('colorPicker'),hexInput=document.getElementById('hexInput'),circleFace=document.getElementById('circleFace');
+function applyColor(v){
+  currentHex=v;circleFace.style.background=v;circleFace.style.boxShadow=`0 0 20px ${v}55`;
+  picker.value=v;hexInput.value=v.slice(1).toUpperCase();generate();
+}
+picker.addEventListener('input',e=>applyColor(e.target.value));
+hexInput.addEventListener('input',e=>{let v=e.target.value.replace(/[^0-9A-Fa-f]/g,'').toUpperCase();e.target.value=v;if(v.length===6)applyColor('#'+v);});
+hexInput.addEventListener('keydown',e=>{if(e.key==='Enter'&&hexInput.value.length===6)applyColor('#'+hexInput.value);});
+function randomColor(){applyColor('#'+Math.floor(Math.random()*0xFFFFFF).toString(16).padStart(6,'0'));}
+
+/* ════════════════ TINT & SHADE EXPLORER ════════════════ */
+function updateTsPaletteDots(){
+  document.getElementById('tsPaletteDots').innerHTML=currentColors.map((c,i)=>`
+    <div class="ts-dot" style="background:${c}" title="${c.toUpperCase()}" onclick="exploreTintShade('${c}',${i})"></div>`).join('');
+}
+
+document.getElementById('tsColorInput').addEventListener('input',e=>{
+  const v=e.target.value;document.getElementById('tsPicker').style.background=v;exploreTintShade(v,-1);
+});
+
+function exploreTintShade(hex,dotIdx){
+  document.querySelectorAll('.ts-dot').forEach((d,i)=>d.classList.toggle('active',i===dotIdx));
+  document.getElementById('tsPicker').style.background=hex;
+  const[h,s,l]=hexToHsl(hex);
+  const tints=Array.from({length:10},(_,i)=>hslToHex(h,s,Math.min(96,l+((96-l)*(i+1)/10)));
+  const shades=Array.from({length:10},(_,i)=>hslToHex(h,s,Math.max(4,l-((l-4)*(i+1)/10)));
+  document.getElementById('tsOutput').innerHTML=`
+    <div class="ts-section">
+      <div class="ts-section-title">Tints (lighter)</div>
+      <div class="ts-row">${[...tints].reverse().map(c=>`
+        <div class="ts-swatch" style="background:${c};color:${textCol(c)}" onclick="copyColor('${c}')">
+          <span class="ts-swatch-hex">${c.toUpperCase()}</span>
+        </div>`).join('')}</div>
+    </div>
+    <div class="ts-section">
+      <div class="ts-section-title">Original</div>
+      <div style="display:flex;gap:.5rem;align-items:center">
+        <div style="width:56px;height:56px;border-radius:50%;background:${hex};border:3px solid rgba(124,58,237,.2);box-shadow:0 4px 14px rgba(0,0,0,.12)"></div>
+        <div style="font-family:'DM Mono',monospace;font-size:.9rem;font-weight:500;color:var(--deep)">${hex.toUpperCase()}</div>
+      </div>
+    </div>
+    <div class="ts-section">
+      <div class="ts-section-title">Shades (darker)</div>
+      <div class="ts-row">${shades.map(c=>`
+        <div class="ts-swatch" style="background:${c};color:${textCol(c)}" onclick="copyColor('${c}')">
+          <span class="ts-swatch-hex">${c.toUpperCase()}</span>
+        </div>`).join('')}</div>
+    </div>`;
+}
+
+/* ════════════════ COLOUR BLINDNESS SIMULATOR ════════════════ */
+// Standard CVD simulation matrices
+const cvdMatrices={
+  normal:{name:'Normal Vision',desc:'How everyone else sees it',m:[[1,0,0],[0,1,0],[0,0,1]]},
+  deuteranopia:{name:'Deuteranopia',desc:'Green-blind (~6% of males)',m:[[0.367,0.861,-0.228],[0.280,0.673,0.047],[-0.012,0.043,0.969]]},
+  protanopia:{name:'Protanopia',desc:'Red-blind (~1% of males)',m:[[0.152,1.053,-0.205],[0.115,0.786,0.099],[-0.004,-0.048,1.052]]},
+  tritanopia:{name:'Tritanopia',desc:'Blue-blind (rare)',m:[[1.256,-0.077,-0.179],[-0.078,0.931,0.148],[0.004,0.691,0.305]]},
+  achromatopsia:{name:'Achromatopsia',desc:'Total colour blindness (very rare)',m:[[0.299,0.587,0.114],[0.299,0.587,0.114],[0.299,0.587,0.114]]}
+};
+
+function simulateCVD(hex,matrix){
+  const{r,g,b}=hexToRgb(hex);
+  const rr=r/255,gg=g/255,bb=b/255;
+  const m=matrix;
+  const nr=Math.round(Math.min(1,Math.max(0,m[0][0]*rr+m[0][1]*gg+m[0][2]*bb))*255);
+  const ng=Math.round(Math.min(1,Math.max(0,m[1][0]*rr+m[1][1]*gg+m[1][2]*bb))*255);
+  const nb=Math.round(Math.min(1,Math.max(0,m[2][0]*rr+m[2][1]*gg+m[2][2]*bb))*255);
+  return rgbToHex(nr,ng,nb);
+}
+
+function updateCVD(){
+  if(!currentColors.length){document.getElementById('cvdGrid').innerHTML='<div class="cvd-empty">Generate a palette first.</div>';return;}
+  document.getElementById('cvdGrid').innerHTML=Object.entries(cvdMatrices).map(([k,{name,desc,m}])=>`
+    <div class="cvd-card">
+      <div class="cvd-label-bar">
+        <span class="cvd-label">${name}</span>
+        <span class="cvd-desc">${desc}</span>
+      </div>
+      <div class="cvd-swatches">
+        ${currentColors.map(c=>`<div class="cvd-swatch" style="background:${simulateCVD(c,m)}" title="${simulateCVD(c,m)}"></div>`).join('')}
+      </div>
+    </div>`).join('');
+}
+
+/* ════════════════ CUSTOM BUILDER ════════════════ */
+function initBuilder(){
+  document.getElementById('builderGrid').innerHTML=builderColors.map((c,i)=>`
+    <div class="builder-slot">
+      <div class="builder-circle-wrap">
+        <input type="color" value="${c}" onchange="builderColors[${i}]=this.value;updateBuilderPreview()">
+        <div class="builder-circle-face" id="bFace${i}" style="background:${c}"></div>
+      </div>
+      <div class="builder-hex-mini" id="bHex${i}">${c.slice(1).toUpperCase()}</div>
+    </div>`).join('');
+  // watch changes
+  document.querySelectorAll('.builder-circle-wrap input').forEach((inp,i)=>{
+    inp.addEventListener('input',e=>{
+      builderColors[i]=e.target.value;
+      document.getElementById('bFace'+i).style.background=e.target.value;
+      document.getElementById('bHex'+i).textContent=e.target.value.slice(1).toUpperCase();
+      updateBuilderPreview();
+    });
+  });
+  updateBuilderPreview();
+}
+
+function updateBuilderPreview(){
+  document.getElementById('builderPreview').innerHTML=builderColors.map(c=>`<div class="builder-preview-swatch" style="background:${c}"></div>`).join('');
+}
+
+function useBuiltPalette(){
+  currentColors=[...builderColors];render(currentColors);
+  currentName='Custom Palette';document.getElementById('nameText').textContent='Custom Palette';
+  switchTab('generate',document.querySelector('.tab-btn'));showToast('Custom palette loaded!');
+}
+
+function randomiseBuilder(){
+  builderColors=Array.from({length:5},()=>'#'+Math.floor(Math.random()*0xFFFFFF).toString(16).padStart(6,'0'));
+  initBuilder();
+}
+
+function loadCurrentToBuilder(){
+  if(!currentColors.length)return;
+  builderColors=[...currentColors];initBuilder();showToast('Current palette loaded into builder');
+}
+
+/* ════════════════ PALETTE MIXER ════════════════ */
+function renderMixer(){
+  const saved=getSaved();
+  const mixerBody=document.getElementById('mixerBody');
+  if(saved.length<2){mixerBody.innerHTML='<div class="mixer-empty">Save at least 2 palettes to use the mixer.</div>';return;}
+  const opts=saved.map((p,i)=>`<option value="${i}">${p.name}</option>`).join('');
+  mixerBody.innerHTML=`
+    <div class="mixer-label">Choose two palettes to blend</div>
+    <div class="mixer-row">
+      <div>
+        <div class="mixer-label">Palette A</div>
+        <select class="mixer-select" id="mixA" onchange="previewMix()">${opts}</select>
+        <div class="mini-palette" id="miniA">${saved[0].colors.map(c=>`<div class="mini-swatch" style="background:${c}"></div>`).join('')}</div>
+      </div>
+      <div class="mixer-plus">⊕</div>
+      <div>
+        <div class="mixer-label">Palette B</div>
+        <select class="mixer-select" id="mixB" onchange="previewMix()">${opts.replace('value="0"','value="0"').replace('selected','')}</select>
+        <div class="mini-palette" id="miniB">${saved[Math.min(1,saved.length-1)].colors.map(c=>`<div class="mini-swatch" style="background:${c}"></div>`).join('')}</div>
+      </div>
+    </div>
+    <div class="mixer-blend-row">
+      <span class="blend-label">Blend A ←→ B</span>
+      <input type="range" min="0" max="100" value="50" id="blendSlider" oninput="previewMix()">
+      <span id="blendVal" style="font-family:'DM Mono',monospace;font-size:.7rem;color:var(--muted)">50%</span>
+    </div>
+    <div class="mixer-label">Mixed Result</div>
+    <div class="mixer-preview" id="mixPreview"></div>
+    <div style="display:flex;gap:.7rem;flex-wrap:wrap">
+      <button class="act-btn primary" onclick="useMixedPalette()">→ Use Mixed Palette</button>
+      <button class="act-btn" onclick="saveMixedPalette()">💾 Save Mixed</button>
+    </div>`;
+  // set B default to 1
+  document.getElementById('mixB').value=1;
+  previewMix();
+}
+
+function blendHex(h1,h2,t){
+  const a=hexToHsl(h1),b=hexToHsl(h2);
+  return hslToHex(a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t,a[2]+(b[2]-a[2])*t);
+}
+
+let mixedColors=[];
+function previewMix(){
+  const saved=getSaved();
+  const ai=parseInt(document.getElementById('mixA').value),bi=parseInt(document.getElementById('mixB').value);
+  const t=(document.getElementById('blendSlider').value)/100;
+  document.getElementById('blendVal').textContent=Math.round(t*100)+'%';
+  const pA=saved[ai],pB=saved[bi];
+  document.getElementById('miniA').innerHTML=pA.colors.map(c=>`<div class="mini-swatch" style="background:${c}"></div>`).join('');
+  document.getElementById('miniB').innerHTML=pB.colors.map(c=>`<div class="mini-swatch" style="background:${c}"></div>`).join('');
+  mixedColors=pA.colors.map((c,i)=>blendHex(c,pB.colors[i]||c,t));
+  document.getElementById('mixPreview').innerHTML=mixedColors.map(c=>`<div class="mixer-swatch" style="background:${c}"></div>`).join('');
+}
+
+function useMixedPalette(){
+  if(!mixedColors.length)return;
+  currentColors=[...mixedColors];render(currentColors);
+  currentName='Mixed Palette';document.getElementById('nameText').textContent='Mixed Palette';
+  switchTab('generate',document.querySelector('.tab-btn'));showToast('Mixed palette loaded!');
+}
+function saveMixedPalette(){
+  if(!mixedColors.length)return;
+  const saved=getSaved();
+  saved.unshift({id:Date.now(),name:'Mixed Palette',colors:[...mixedColors],mode:'custom',date:new Date().toLocaleDateString()});
+  localStorage.setItem('palettify_saved',JSON.stringify(saved));
+  renderSaved();showToast('💾 Mixed palette saved!');
+}
+
+/* ════════════════ FONT PAIRING ════════════════ */
+async function generateFontPairs(){
+  if(!currentColors.length){showToast('Generate a palette first!');return;}
+  const loadEl=document.getElementById('fontLoading'),out=document.getElementById('fontPairsOutput');
+  const mood=document.getElementById('fontMood').value;
+  loadEl.style.display='inline';out.innerHTML='';
+  const moodText=mood==='auto'?`palette colours ${currentColors.join(', ')}`:`${mood} mood, palette: ${currentColors.join(', ')}`;
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:600,
+        messages:[{role:'user',content:`Suggest 3 Google Font pairings for a design with this ${moodText}.
+Return ONLY valid JSON array, no markdown, no explanation:
+[{"display":"FontName","body":"FontName","mood":"one word mood","demoHead":"Short heading text","demoBody":"One sentence body text."}]`}]})});
+    const data=await res.json();
+    let txt=data.content?.[0]?.text?.trim()||'[]';
+    txt=txt.replace(/```json|```/g,'').trim();
+    const pairs=JSON.parse(txt);
+    // load Google Fonts
+    const allFonts=[...new Set(pairs.flatMap(p=>[p.display,p.body]))];
+    const link=document.createElement('link');
+    link.rel='stylesheet';
+    link.href='https://fonts.googleapis.com/css2?'+allFonts.map(f=>`family=${f.replace(/ /g,'+')}:wght@400;700`).join('&');
+    document.head.appendChild(link);
+    setTimeout(()=>{
+      out.innerHTML=`<div class="font-pairs">${pairs.map(p=>`
+        <div class="font-card">
+          <div class="font-pair-names">
+            <span class="font-name">${p.display}</span>
+            <span class="font-pair-plus">+</span>
+            <span class="font-name">${p.body}</span>
+          </div>
+          <div class="font-demo-head" style="font-family:'${p.display}',serif">${p.demoHead}</div>
+          <div class="font-demo-body" style="font-family:'${p.body}',sans-serif">${p.demoBody}</div>
+          <div class="font-mood-tag">Mood: ${p.mood}</div>
+        </div>`).join('')}</div>`;
+    },600);
+  }catch(e){
+    out.innerHTML='<div class="font-empty">Could not generate font pairs. Try again!</div>';
+  }
+  loadEl.style.display='none';
+}
+
+/* ════════════════ ANIMATED WALLPAPER ════════════════ */
+let wlCtx, wlBlobs=[], wlFrame=0;
+
+function initWallpaper(){
+  const canvas=document.getElementById('wallpaperCanvas');
+  wlCtx=canvas.getContext('2d');
+  canvas.onclick=()=>{wallpaperPaused=!wallpaperPaused;if(!wallpaperPaused)animateWallpaper();};
+  restartWallpaper();
+}
+
+function restartWallpaper(){
+  if(wallpaperAnim)cancelAnimationFrame(wallpaperAnim);
+  wlFrame=0;
+  const colors=currentColors.length?currentColors:['#a855f7','#c084fc','#7c3aed','#e879f9','#4c1d95'];
+  const style=document.getElementById('wlStyle').value;
+  const speed={'slow':0.3,'normal':0.7,'fast':1.5}[document.getElementById('wlSpeed').value]||0.7;
+  const canvas=document.getElementById('wallpaperCanvas');
+  const W=canvas.width,H=canvas.height;
+  // create blobs
+  wlBlobs=colors.map((c,i)=>({
+    x:Math.random()*W,y:Math.random()*H,
+    vx:(Math.random()-.5)*speed,vy:(Math.random()-.5)*speed,
+    r:120+Math.random()*160,color:c,
+    phase:Math.random()*Math.PI*2
+  }));
+  function frame(){
+    if(wallpaperPaused)return;
+    wlFrame++;
+    const ctx=wlCtx;
+    ctx.clearRect(0,0,W,H);
+    // bg
+    ctx.fillStyle=colors[0];ctx.fillRect(0,0,W,H);
+    if(style==='blobs'||style==='aurora'){
+      wlBlobs.forEach(b=>{
+        b.x+=b.vx;b.y+=b.vy;
+        if(b.x<-b.r||b.x>W+b.r)b.vx*=-1;
+        if(b.y<-b.r||b.y>H+b.r)b.vy*=-1;
+        const grd=ctx.createRadialGradient(b.x,b.y,0,b.x,b.y,b.r*(style==='aurora'?2.2:1.4));
+        grd.addColorStop(0,b.color+'cc');grd.addColorStop(1,b.color+'00');
+        ctx.fillStyle=grd;ctx.beginPath();
+        if(style==='aurora'){
+          const offset=Math.sin(wlFrame*.012+b.phase)*60;
+          ctx.ellipse(b.x,b.y+offset,b.r*1.8,b.r*.6,wlFrame*.004+b.phase,0,Math.PI*2);
+        }else{ctx.arc(b.x,b.y,b.r,0,Math.PI*2);}
+        ctx.fill();
+      });
+    }else if(style==='waves'){
+      const t=wlFrame*.018;
+      colors.forEach((c,ci)=>{
+        ctx.beginPath();
+        const y0=H*(.25+ci*.12);
+        ctx.moveTo(0,y0);
+        for(let x=0;x<=W;x+=4){
+          const y=y0+Math.sin(x*.008+t+ci)*50+Math.sin(x*.018-t*.7+ci)*30;
+          ctx.lineTo(x,y);
+        }
+        ctx.lineTo(W,H);ctx.lineTo(0,H);ctx.closePath();
+        ctx.fillStyle=c+'99';ctx.fill();
+      });
+    }else if(style==='mesh'){
+      const t=wlFrame*.01;
+      const cols=3,rows=3;
+      for(let gy=0;gy<=rows;gy++)for(let gx=0;gx<=cols;gx++){
+        const ci=(gx+gy*cols)%colors.length;
+        const px=gx*(W/cols)+Math.sin(t+gx+gy)*40;
+        const py=gy*(H/rows)+Math.cos(t*.7+gx-gy)*40;
+        const grd=ctx.createRadialGradient(px,py,0,px,py,W*.5);
+        grd.addColorStop(0,colors[ci]+'bb');grd.addColorStop(1,colors[ci]+'00');
+        ctx.fillStyle=grd;ctx.fillRect(0,0,W,H);
+      }
+    }
+    wallpaperAnim=requestAnimationFrame(frame);
+  }
+  wallpaperPaused=false;
+  animateWallpaper=()=>requestAnimationFrame(frame);
+  frame();
+}
+let animateWallpaper=()=>{};
+
+function downloadWallpaper(){
+  const canvas=document.getElementById('wallpaperCanvas');
+  canvas.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='palettify-wallpaper.png';a.click();},'image/png');
+  showToast('🌊 Wallpaper downloaded!');
+}
+
+/* ════════════════ EXPORT ════════════════ */
+function toggleExportMenu(){document.getElementById('exportMenu').classList.toggle('open');}
+document.addEventListener('click',e=>{if(!e.target.closest('.export-wrap'))document.getElementById('exportMenu').classList.remove('open');});
+
+function exportCSS(){
+  const vars=currentColors.map((c,i)=>`  --color-${i+1}: ${c.toUpperCase()};`).join('\n');
+  downloadText(`/* ${currentName} — Palettify by Thunder Technology */\n:root {\n${vars}\n}`,'palette.css','text/css');
+  showToast('CSS downloaded!');
+}
+function exportJSON(){
+  downloadText(JSON.stringify({name:currentName,mode:currentMode,colors:currentColors.map(c=>c.toUpperCase()),source:'Palettify by Thunder Technology'},null,2),'palette.json','application/json');
+  showToast('JSON downloaded!');
+}
+function exportPNG(){
+  const canvas=document.getElementById('hiddenCanvas');
+  const W=1200,H=360,PAD=20,LH=60;
+  canvas.width=W;canvas.height=H+LH;
+  const ctx=canvas.getContext('2d');
+  const sw=W/currentColors.length;
+  currentColors.forEach((c,i)=>{ctx.fillStyle=c;ctx.fillRect(i*sw,0,sw,H);ctx.fillStyle=textCol(c);ctx.font='bold 18px monospace';ctx.textAlign='center';ctx.fillText(c.toUpperCase(),i*sw+sw/2,H-18);});
+  ctx.fillStyle='#f3e8ff';ctx.fillRect(0,H,W,LH);
+  ctx.fillStyle='#4c1d95';ctx.font='bold 20px serif';ctx.textAlign='left';ctx.fillText(currentName,PAD,H+36);
+  ctx.fillStyle='#9170b8';ctx.font='14px monospace';ctx.textAlign='right';ctx.fillText('Palettify by Thunder Technology',W-PAD,H+36);
+  canvas.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='palette.png';a.click();},'image/png');
+  showToast('PNG downloaded!');
+}
+function exportTailwind(){
+  const obj=currentColors.map((c,i)=>`    '${i+1}': '${c.toUpperCase()}'`).join(',\n');
+  downloadText(`// ${currentName} — Palettify by Thunder Technology\nmodule.exports = {\n  theme: {\n    extend: {\n      colors: {\n        palette: {\n${obj}\n        }\n      }\n    }\n  }\n}`,'tailwind.palette.js','text/javascript');
+  showToast('Tailwind config downloaded!');
+}
+function downloadText(content,filename,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([content],{type}));a.download=filename;a.click();}
+
+/* ════════════════ IMAGE EXTRACTOR ════════════════ */
+function handleImageUpload(input){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const img=document.getElementById('uploadedImg');img.src=e.target.result;
+    document.getElementById('uploadPreview').style.display='block';
+    img.onload=()=>extractColors(img);
+  };reader.readAsDataURL(file);
+}
+function extractColors(img){
+  const canvas=document.createElement('canvas'),size=120;canvas.width=size;canvas.height=size;
+  const ctx=canvas.getContext('2d');ctx.drawImage(img,0,0,size,size);
+  const data=ctx.getImageData(0,0,size,size).data;
+  const buckets={};
+  for(let i=0;i<data.length;i+=16){
+    const r=Math.round(data[i]/32)*32,g=Math.round(data[i+1]/32)*32,b=Math.round(data[i+2]/32)*32;
+    if(data[i+3]<128)continue;
+    const key=`${r},${g},${b}`;
+    if(!buckets[key])buckets[key]={r,g,b,count:0};
+    buckets[key].count++;
+  }
+  const sorted=Object.values(buckets).sort((a,b)=>b.count-a.count);
+  const picked=[];
+  for(const c of sorted){
+    if(picked.length>=5)break;
+    const hex=rgbToHex(Math.min(255,c.r),Math.min(255,c.g),Math.min(255,c.b));
+    if(!picked.length||picked.every(p=>colorDist(p,hex)>60))picked.push(hex);
+  }
+  while(picked.length<5)picked.push(picked[picked.length-1]||'#cccccc');
+  extractedColors=picked;
+  document.getElementById('extractSwatches').innerHTML=picked.map(c=>`
+    <div class="extract-swatch" style="background:${c};color:${textCol(c)}" onclick="copyColor('${c}')">
+      <span class="extract-hex">${c.toUpperCase()}</span>
+    </div>`).join('');
+  document.getElementById('extractResult').style.display='block';
+}
+function colorDist(h1,h2){const a=hexToRgb(h1),b=hexToRgb(h2);return Math.sqrt((a.r-b.r)**2+(a.g-b.g)**2+(a.b-b.b)**2);}
+function useExtractedPalette(){
+  if(!extractedColors.length)return;
+  currentColors=[...extractedColors];render(currentColors);
+  currentName='Extracted Palette';document.getElementById('nameText').textContent='Extracted Palette';
+  switchTab('generate',document.querySelector('.tab-btn'));showToast('Extracted palette loaded!');
+}
+const zone=document.getElementById('uploadZone');
+zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('drag-over');});
+zone.addEventListener('dragleave',()=>zone.classList.remove('drag-over'));
+zone.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('drag-over');const file=e.dataTransfer.files[0];if(file&&file.type.startsWith('image/')){const dt=new DataTransfer();dt.items.add(file);document.getElementById('imageFile').files=dt.files;handleImageUpload(document.getElementById('imageFile'));}});
+
+/* ════════════════ SAVED PALETTES ════════════════ */
+function savePalette(){
+  if(!currentColors.length)return;
+  const saved=getSaved();
+  saved.unshift({id:Date.now(),name:currentName||'My Palette',colors:[...currentColors],mode:currentMode,date:new Date().toLocaleDateString()});
+  localStorage.setItem('palettify_saved',JSON.stringify(saved));renderSaved();showToast('💾 Palette saved!');
+}
+function getSaved(){try{return JSON.parse(localStorage.getItem('palettify_saved'))||[];}catch{return[];}}
+function deleteSaved(id){const s=getSaved().filter(p=>p.id!==id);localStorage.setItem('palettify_saved',JSON.stringify(s));renderSaved();showToast('Deleted');}
+function clearAllSaved(){if(!confirm('Clear all saved palettes?'))return;localStorage.removeItem('palettify_saved');renderSaved();}
+function loadSaved(id){
+  const p=getSaved().find(x=>x.id===id);if(!p)return;
+  currentColors=[...p.colors];currentMode=p.mode;currentName=p.name;
+  document.querySelectorAll('.mode-btn').forEach(b=>b.classList.toggle('active',b.textContent.toLowerCase().includes(p.mode)));
+  render(p.colors);document.getElementById('nameText').textContent=p.name;
+  switchTab('generate',document.querySelector('.tab-btn'));showToast(`Loaded: ${p.name}`);
+}
+function renderSaved(){
+  const saved=getSaved();
+  const grid=document.getElementById('savedGrid'),empty=document.getElementById('savedEmpty');
+  const badge=document.getElementById('savedBadge');
+  document.getElementById('savedCount').textContent=`${saved.length} palette${saved.length!==1?'s':''}`;
+  badge.textContent=saved.length;badge.style.display=saved.length?'inline':'none';
+  if(!saved.length){grid.innerHTML='';empty.style.display='block';return;}
+  empty.style.display='none';
+  grid.innerHTML=saved.map(p=>`
+    <div class="saved-card">
+      <div class="saved-swatches" onclick="loadSaved(${p.id})">${p.colors.map(c=>`<div class="saved-swatch" style="background:${c}"></div>`).join('')}</div>
+      <div class="saved-info">
+        <div class="saved-name">${p.name}</div>
+        <div class="saved-meta">
+          <span class="saved-date">${p.date} · ${p.mode}</span>
+          <div class="saved-actions">
+            <button class="saved-act" onclick="loadSaved(${p.id})">Load</button>
+            <button class="saved-act del" onclick="deleteSaved(${p.id})">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+/* ════════════════ COLOUR INFO MODAL ════════════════ */
+function openInfo(e,hex){
+  e.stopPropagation();
+  const{r,g,b}=hexToRgb(hex);const[h,s,l]=hexToHsl(hex);const{c,m,y,k}=hexToCmyk(hex);const u=hex.toUpperCase();
+  document.getElementById('infoSwatchBig').style.background=hex;
+  document.getElementById('infoTitle').textContent=u;
+  document.getElementById('infoHex').textContent=u;
+  document.getElementById('infoRGB').textContent=`rgb(${r}, ${g}, ${b})`;
+  document.getElementById('infoHSL').textContent=`hsl(${h}, ${s}%, ${l}%)`;
+  document.getElementById('infoCMYK').textContent=`${c}% ${m}% ${y}% ${k}%`;
+  document.getElementById('infoOverlay').classList.add('open');
+}
+function closeInfo(){document.getElementById('infoOverlay').classList.remove('open');}
+function copyVal(el){const v=el.querySelector('[id]').textContent;navigator.clipboard.writeText(v).then(()=>showToast(`✓ ${v}`));}
+
+/* ════════════════ FULL PAGE PREVIEW ════════════════ */
+function openPreview(){
+  if(!currentColors.length)return;
+  const[c1,c2,c3,c4,c5]=currentColors;const t1=textCol(c1),t2=textCol(c2),t3=textCol(c3),t4=textCol(c4);
+  document.getElementById('previewPage').innerHTML=`
+    <nav class="prev-nav" style="background:${c1};color:${t1}">
+      <div class="prev-nav-logo" style="color:${t1}">${currentName}</div>
+      <div class="prev-nav-links" style="color:${t1}"><span>About</span><span>Work</span><span>Contact</span></div>
+      <button class="prev-nav-cta" style="background:${c3};color:${t3}">Get Started</button>
+    </nav>
+    <div class="prev-hero" style="background:${c2};color:${t2}">
+      <h2>${currentName}<br>for Every Project</h2>
+      <p>Crafted with purpose. Designed to inspire.</p>
+      <div class="prev-btns">
+        <button class="prev-btn" style="background:${c3};color:${t3}">Explore</button>
+        <button class="prev-btn" style="background:transparent;color:${t2};border:2px solid ${t2}55">Learn More</button>
+      </div>
+    </div>
+    <div style="background:${c1};padding:2.5rem 3rem">
+      <div class="prev-cards" style="padding:0">
+        ${[c3,c4,c5].map((cc,i)=>`<div class="prev-card" style="background:${cc};color:${textCol(cc)}"><h3>Feature ${i+1}</h3><p>${cc.toUpperCase()} as a UI surface colour.</p></div>`).join('')}
+      </div>
+    </div>
+    <div class="prev-cta" style="background:${c4};color:${t4}">
+      <h3>Ready to create?</h3><p>Build stunning designs with your perfect palette.</p>
+      <button class="prev-btn" style="background:${c1};color:${textCol(c1)};border:none;padding:.85rem 2.4rem;border-radius:30px;font-size:.9rem;font-weight:700;cursor:pointer">Start Building</button>
+    </div>`;
+  document.getElementById('previewOverlay').classList.add('open');
+}
+
+/* ════════════════ TABS ════════════════ */
+function switchTab(name,btn){
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  if(btn)btn.classList.add('active');
+  if(name==='saved')renderSaved();
+  if(name==='mixer')renderMixer();
+  if(name==='blindness')updateCVD();
+  if(name==='wallpaper')restartWallpaper();
+  else if(wallpaperAnim){cancelAnimationFrame(wallpaperAnim);wallpaperAnim=null;}
+}
+
+/* ════════════════ COPY / TOAST ════════════════ */
+function copyColor(hex){navigator.clipboard.writeText(hex.toUpperCase()).then(()=>showToast(`✓ Copied ${hex.toUpperCase()}`));}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
+
+/* ════════════════ INIT ════════════════ */
+applyColor('#a855f7');
+initBuilder();
+renderSaved();
+initWallpaper();
+</script>
+</body>
+</html>
