@@ -55,9 +55,10 @@ main{flex:1;max-width:980px;margin:0 auto;padding:2.8rem 1.8rem 5rem;width:100%}
 /* VERSION BADGE */
 .v-badge{display:inline-flex;align-items:center;gap:.4rem;background:linear-gradient(135deg,var(--p2),var(--p3));color:#fff;border-radius:20px;padding:.22rem .9rem;font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;margin-bottom:1rem}
 
-/* TABS */
-.tabs{display:flex;gap:.35rem;margin-bottom:1.6rem;background:rgba(255,255,255,.45);border:1px solid var(--border);border-radius:16px;padding:.32rem;animation:fadeUp .7s .15s ease both;flex-wrap:wrap}
-.tab-btn{flex:1;min-width:90px;padding:.58rem .7rem;border:none;background:none;border-radius:11px;font-family:'Outfit',sans-serif;font-size:.76rem;font-weight:600;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap;display:flex;align-items:center;justify-content:center;gap:.35rem}
+/* FIX #13: TABS — horizontal scroll on mobile instead of wrapping */
+.tabs{display:flex;gap:.35rem;margin-bottom:1.6rem;background:rgba(255,255,255,.45);border:1px solid var(--border);border-radius:16px;padding:.32rem;animation:fadeUp .7s .15s ease both;overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab-btn{flex:0 0 auto;padding:.58rem .7rem;border:none;background:none;border-radius:11px;font-family:'Outfit',sans-serif;font-size:.76rem;font-weight:600;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap;display:flex;align-items:center;justify-content:center;gap:.35rem}
 .tab-btn.active{background:#fff;color:var(--deep);box-shadow:0 2px 12px var(--shadow)}
 .tab-btn:hover:not(.active){color:var(--p3)}
 .tab-content{display:none}.tab-content.active{display:block;animation:fadeUp .4s ease both}
@@ -92,6 +93,12 @@ main{flex:1;max-width:980px;margin:0 auto;padding:2.8rem 1.8rem 5rem;width:100%}
 .act-btn.ghost{background:transparent;color:var(--muted);border-color:var(--border)}
 .act-btn.ghost:hover{color:var(--p3);border-color:var(--p1);background:rgba(255,255,255,.5)}
 
+/* UNDO/REDO BUTTONS - FIX #8 */
+.history-btns{display:flex;gap:.3rem}
+.hist-btn{background:rgba(255,255,255,.6);border:1.5px solid var(--border);border-radius:10px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:.85rem;cursor:pointer;transition:all .2s;color:var(--muted)}
+.hist-btn:hover:not(:disabled){border-color:var(--p1);color:var(--p3);transform:translateY(-1px)}
+.hist-btn:disabled{opacity:.3;cursor:not-allowed}
+
 /* SWATCHES */
 .swatches{display:grid;grid-template-columns:repeat(5,1fr);border-radius:18px;overflow:hidden;height:250px;box-shadow:0 14px 46px rgba(76,29,149,.14),0 2px 8px rgba(0,0,0,.06)}
 .swatch{position:relative;cursor:pointer;transition:flex .38s cubic-bezier(.34,1.56,.64,1);overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;padding:.9rem .8rem}
@@ -102,7 +109,8 @@ main{flex:1;max-width:980px;margin:0 auto;padding:2.8rem 1.8rem 5rem;width:100%}
 .swatch-lbl{font-size:.58rem;opacity:.65;font-family:'DM Mono',monospace}
 .copy-badge{position:absolute;top:.6rem;right:.6rem;background:rgba(0,0,0,.22);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:.16rem .5rem;font-family:'DM Mono',monospace;font-size:.56rem;color:#fff;opacity:0;transition:opacity .2s}
 .swatch:hover .copy-badge{opacity:1}
-.info-dot{position:absolute;bottom:.6rem;left:.6rem;width:20px;height:20px;background:rgba(0,0,0,.22);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;opacity:0;transition:opacity .2s;cursor:pointer}
+/* FIX #14: larger info-dot touch target */
+.info-dot{position:absolute;bottom:.6rem;left:.6rem;width:32px;height:32px;background:rgba(0,0,0,.22);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;opacity:0;transition:opacity .2s;cursor:pointer;z-index:5}
 .swatch:hover .info-dot{opacity:1}
 
 /* DOT ROW */
@@ -134,7 +142,36 @@ main{flex:1;max-width:980px;margin:0 auto;padding:2.8rem 1.8rem 5rem;width:100%}
 .chips{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.8rem}
 .chip{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;padding:.2rem .7rem;border-radius:20px;border:1px solid rgba(168,85,247,.2);color:var(--p2);background:rgba(168,85,247,.06)}
 
-/* ════ TINT & SHADE EXPLORER ════ */
+/* CONTRAST CHECKER - FIX #7 */
+.contrast-section{margin-top:1.4rem}
+.contrast-title{font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:.8rem;display:flex;align-items:center;gap:.5rem}
+.contrast-title::after{content:'';flex:1;height:1px;background:var(--border)}
+.contrast-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:.6rem}
+.contrast-card{border-radius:12px;padding:.7rem .9rem;border:1px solid var(--border);background:rgba(255,255,255,.5)}
+.contrast-pair{font-family:'DM Mono',monospace;font-size:.58rem;color:var(--muted);margin-bottom:.3rem;letter-spacing:.06em}
+.contrast-ratio{font-family:'DM Mono',monospace;font-size:.9rem;font-weight:700;color:var(--deep)}
+.contrast-badges{display:flex;gap:.3rem;margin-top:.3rem;flex-wrap:wrap}
+.wcag-badge{font-family:'DM Mono',monospace;font-size:.52rem;letter-spacing:.08em;padding:.1rem .4rem;border-radius:6px;font-weight:700}
+.wcag-pass{background:#d1fae5;color:#065f46}
+.wcag-fail{background:#fee2e2;color:#991b1b}
+
+/* ════ SPECIAL PAIRS ════ */
+.special-pairs-section{margin-top:1.6rem}
+.special-pairs-title{font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:.9rem;display:flex;align-items:center;gap:.5rem}
+.special-pairs-title::after{content:'';flex:1;height:1px;background:var(--border)}
+.special-pairs-grid{display:grid;grid-template-columns:1fr 1fr;gap:.9rem}
+.sp-card{border-radius:16px;overflow:hidden;border:1px solid var(--border);box-shadow:0 4px 18px var(--shadow);transition:transform .2s,box-shadow .2s}
+.sp-card:hover{transform:translateY(-3px);box-shadow:0 10px 30px var(--shadow)}
+.sp-well{display:flex;height:110px}
+.sp-half{flex:1;display:flex;flex-direction:column;justify-content:flex-end;padding:.65rem .7rem;transition:flex .35s cubic-bezier(.34,1.56,.64,1)}
+.sp-half:hover{flex:1.6}
+.sp-half-hex{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.1em;font-weight:500;opacity:0;transition:opacity .2s;white-space:nowrap}
+.sp-half:hover .sp-half-hex{opacity:1}
+.sp-info{padding:.6rem .85rem .75rem;background:rgba(255,255,255,.65);display:flex;justify-content:space-between;align-items:center}
+.sp-label{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.13em;text-transform:uppercase;color:var(--muted)}
+.sp-contrast{font-family:'DM Mono',monospace;font-size:.78rem;font-weight:700;color:var(--deep)}
+.sp-badges{display:flex;gap:.25rem}
+.sp-empty{text-align:center;padding:2rem;font-family:'DM Mono',monospace;font-size:.72rem;color:var(--muted);grid-column:1/-1}
 .ts-trigger-row{display:flex;align-items:center;gap:.8rem;margin-bottom:1.4rem;flex-wrap:wrap}
 .ts-picker{width:52px;height:52px;border-radius:50%;border:3px solid rgba(124,58,237,.2);cursor:pointer;transition:transform .2s,box-shadow .3s;flex-shrink:0}
 .ts-picker:hover{transform:scale(1.1);box-shadow:0 0 0 8px rgba(168,85,247,.1)}
@@ -229,6 +266,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
 .extract-swatch:hover{flex:2}
 .extract-hex{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.08em;opacity:0;transition:opacity .2s;font-weight:500}
 .extract-swatch:hover .extract-hex{opacity:1}
+/* FIX #11: extract error message */
+.extract-error{margin-top:.8rem;font-family:'DM Mono',monospace;font-size:.7rem;color:#ef4444;letter-spacing:.06em;display:none}
 
 /* SAVED */
 .saved-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.3rem}
@@ -308,11 +347,59 @@ footer{background:rgba(228,209,250,.6);border-top:1px solid var(--border);text-a
 /* TOAST */
 .toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(20px);background:rgba(76,29,149,.92);backdrop-filter:blur(12px);border:1px solid rgba(168,85,247,.3);border-radius:30px;padding:.6rem 1.4rem;font-family:'DM Mono',monospace;font-size:.73rem;letter-spacing:.1em;color:#f3e8ff;opacity:0;transition:all .3s;z-index:1100;pointer-events:none}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* KEYBOARD SHORTCUT HINT */
+.kbd-hint{font-family:'DM Mono',monospace;font-size:.58rem;color:var(--muted);letter-spacing:.06em;margin-top:.5rem;opacity:.7}
+kbd{background:rgba(255,255,255,.7);border:1px solid var(--border);border-radius:4px;padding:.1rem .35rem;font-size:.58rem}
+
+/* ════ COLOUR WHEEL ════ */
+.cw-layout{display:grid;grid-template-columns:1fr 340px;gap:1.6rem;align-items:start}
+@media(max-width:800px){.cw-layout{grid-template-columns:1fr}}
+.cw-canvas-wrap{position:relative;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.38);border:1px solid var(--border);border-radius:22px;padding:1.4rem;backdrop-filter:blur(14px)}
+#cwCanvas{border-radius:50%;cursor:crosshair;display:block;max-width:100%;touch-action:none;transition:cursor 0.2s}
+#cwCanvas.custom-mode{cursor:grab}
+#cwCanvas.custom-mode:active{cursor:grabbing}
+.cw-center-dot{position:absolute;width:22px;height:22px;border-radius:50%;border:3px solid #fff;box-shadow:0 2px 10px rgba(0,0,0,.3),0 0 0 2px rgba(124,58,237,.3);pointer-events:none;transform:translate(-50%,-50%);z-index:10;transition:background .2s}
+.cw-harmony-dot{position:absolute;width:16px;height:16px;border-radius:50%;border:2.5px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.25);pointer-events:none;transform:translate(-50%,-50%);z-index:9;transition:all .35s cubic-bezier(.34,1.56,.64,1)}
+.cw-side{display:flex;flex-direction:column;gap:1rem}
+.cw-section-title{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:.7rem;display:flex;align-items:center;gap:.5rem}
+.cw-section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+.cw-harmony-grid{display:grid;grid-template-columns:1fr 1fr;gap:.45rem}
+.cw-harmony-btn{background:rgba(255,255,255,.6);border:1.5px solid var(--border);border-radius:11px;padding:.48rem .65rem;font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);cursor:pointer;transition:all .18s;text-align:center;line-height:1.3}
+.cw-harmony-btn.active{background:linear-gradient(135deg,var(--p2),var(--p3));color:#fff;border-color:transparent;box-shadow:0 3px 12px rgba(124,58,237,.28)}
+.cw-harmony-btn:hover:not(.active){border-color:var(--p1);color:var(--p3);background:rgba(255,255,255,.85)}
+.cw-palette{display:flex;border-radius:16px;overflow:hidden;height:90px;box-shadow:0 8px 28px rgba(76,29,149,.14);cursor:pointer;margin-bottom:.5rem}
+.cw-pal-swatch{flex:1;display:flex;flex-direction:column;justify-content:flex-end;padding:.45rem .5rem;transition:flex .32s cubic-bezier(.34,1.56,.64,1)}
+.cw-pal-swatch:hover{flex:1.8}
+.cw-pal-hex{font-family:'DM Mono',monospace;font-size:.54rem;letter-spacing:.08em;font-weight:600;opacity:0;transition:opacity .2s;text-shadow:0 1px 3px rgba(0,0,0,.3)}
+.cw-pal-swatch:hover .cw-pal-hex{opacity:1}
+.cw-dots-row{display:flex;gap:.55rem;flex-wrap:wrap;margin-bottom:.4rem}
+.cw-dot-item{display:flex;flex-direction:column;align-items:center;gap:.3rem;cursor:pointer;transition:transform .2s}
+.cw-dot-item:hover{transform:translateY(-3px)}
+.cw-dot-circle{width:34px;height:34px;border-radius:50%;border:2.5px solid rgba(124,58,237,.18);box-shadow:0 3px 10px rgba(0,0,0,.1);transition:box-shadow .2s}
+.cw-dot-item:hover .cw-dot-circle{box-shadow:0 5px 16px rgba(124,58,237,.25)}
+.cw-dot-hex{font-family:'DM Mono',monospace;font-size:.54rem;letter-spacing:.07em;color:var(--muted)}
+.cw-hue-row{display:flex;align-items:center;gap:.75rem;margin-bottom:.5rem}
+.cw-hue-label{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);white-space:nowrap;min-width:40px}
+.cw-hue-slider{flex:1;-webkit-appearance:none;height:10px;border-radius:5px;outline:none;cursor:pointer;border:none}
+.cw-hue-slider::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:#fff;border:2.5px solid var(--p2);box-shadow:0 2px 8px rgba(124,58,237,.3);cursor:pointer}
+.cw-sat-label{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);white-space:nowrap;min-width:40px}
+.cw-info-row{display:flex;gap:.5rem;margin-top:.3rem}
+.cw-info-chip{flex:1;background:rgba(255,255,255,.6);border:1px solid var(--border);border-radius:10px;padding:.5rem .65rem;cursor:pointer;transition:all .18s}
+.cw-info-chip:hover{background:#fff;border-color:var(--p1);box-shadow:0 3px 10px var(--shadow)}
+.cw-chip-label{font-family:'DM Mono',monospace;font-size:.5rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:.18rem}
+.cw-chip-val{font-family:'DM Mono',monospace;font-size:.72rem;font-weight:600;color:var(--deep)}
+.cw-use-btn{width:100%;background:linear-gradient(135deg,var(--p2),var(--p3));color:#fff;border:none;border-radius:13px;padding:.7rem 1.4rem;font-family:'Outfit',sans-serif;font-size:.82rem;font-weight:700;letter-spacing:.05em;cursor:pointer;transition:all .22s;box-shadow:0 4px 18px rgba(124,58,237,.28);margin-top:.3rem}
+.cw-use-btn:hover{transform:translateY(-2px);box-shadow:0 8px 26px rgba(124,58,237,.38)}
+.cw-adobe-link{display:flex;align-items:center;justify-content:center;gap:.5rem;margin-top:.5rem;text-decoration:none;font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);transition:color .2s}
+.cw-adobe-link:hover{color:var(--p2)}
+.cw-adobe-icon{width:14px;height:14px;opacity:.6}
+
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 @media(max-width:640px){
   nav{padding:.9rem 1.1rem}.nav-socials{gap:.4rem}.soc-btn{padding:.36rem .65rem;font-size:.72rem}
   main{padding:2rem 1rem 3.5rem}.card{padding:1.5rem 1.3rem}
-  .swatches{height:190px}.tabs{gap:.25rem}.builder-grid{grid-template-columns:repeat(5,1fr);gap:.5rem}
+  .swatches{height:190px}.builder-grid{grid-template-columns:repeat(5,1fr);gap:.5rem}
   .mixer-row{grid-template-columns:1fr;gap:.6rem}.mixer-plus{display:none}
   .info-grid{grid-template-columns:1fr}
 }
@@ -347,22 +434,24 @@ footer{background:rgba(228,209,250,.6);border-top:1px solid var(--border);text-a
 <main>
   <div class="hero">
     <div class="eyebrow">⚡ Thunder Technology</div>
-    <div class="v-badge">✦ Version 3.0</div>
+    <div class="v-badge">✦ Version 3.1</div>
     <h1>One colour.<br><em>Infinite possibilities.</em></h1>
     <p>Generate · Extract · Explore · Mix · Build · Animate · Preview</p>
   </div>
 
-  <!-- TABS -->
-  <div class="tabs">
-    <button class="tab-btn active"  onclick="switchTab('generate',this)">🎨 Generate</button>
-    <button class="tab-btn" onclick="switchTab('tintshade',this)">🎭 Tints & Shades</button>
-    <button class="tab-btn" onclick="switchTab('blindness',this)">👁 Blindness Sim</button>
-    <button class="tab-btn" onclick="switchTab('build',this)">✏️ Custom Build</button>
-    <button class="tab-btn" onclick="switchTab('mixer',this)">🔀 Mixer</button>
-    <button class="tab-btn" onclick="switchTab('fonts',this)">🔤 Font Pairs</button>
-    <button class="tab-btn" onclick="switchTab('wallpaper',this)">🌊 Wallpaper</button>
-    <button class="tab-btn" onclick="switchTab('extract',this)">🖼 Extract</button>
-    <button class="tab-btn" onclick="switchTab('saved',this)">💾 Saved <span id="savedBadge" style="display:none;background:var(--p2);color:#fff;border-radius:20px;padding:.08rem .45rem;font-size:.6rem;margin-left:.2rem"></span></button>
+  <!-- FIX #13: Tabs use nowrap + overflow-x scroll on mobile -->
+  <div class="tabs" id="mainTabs">
+    <button class="tab-btn active" data-tab="generate" onclick="switchTab('generate',this)">🎨 Generate</button>
+    <button class="tab-btn" data-tab="tintshade" onclick="switchTab('tintshade',this)">🎭 Tints & Shades</button>
+    <button class="tab-btn" data-tab="blindness" onclick="switchTab('blindness',this)">👁 Blindness Sim</button>
+    <button class="tab-btn" data-tab="build" onclick="switchTab('build',this)">✏️ Custom Build</button>
+    <button class="tab-btn" data-tab="mixer" onclick="switchTab('mixer',this)">🔀 Mixer</button>
+    <button class="tab-btn" data-tab="fonts" onclick="switchTab('fonts',this)">🔤 Font Pairs</button>
+    <button class="tab-btn" data-tab="wallpaper" onclick="switchTab('wallpaper',this)">🌊 Wallpaper</button>
+    <button class="tab-btn" data-tab="extract" onclick="switchTab('extract',this)">🖼 Extract</button>
+    <!-- FIX #12: savedBadge now exists in HTML -->
+    <button class="tab-btn" data-tab="colourwheel" onclick="switchTab('colourwheel',this)">🎡 Colour Wheel</button>
+    <button class="tab-btn" data-tab="saved" onclick="switchTab('saved',this)">💾 Saved <span id="savedBadge" style="display:none;background:var(--p2);color:#fff;border-radius:20px;padding:.08rem .45rem;font-size:.6rem;margin-left:.2rem"></span></button>
   </div>
 
   <!-- ══════════════════ GENERATE ══════════════════ -->
@@ -377,11 +466,19 @@ footer{background:rgba(228,209,250,.6);border-top:1px solid var(--border);text-a
         </div>
         <div class="hex-wrap">
           <span class="hex-hash">#</span>
-          <input type="text" class="hex-input" id="hexInput" value="A855F7" maxlength="6" placeholder="A855F7">
+          <!-- FIX #5: maxlength 7 to accept pasted #RRGGBB, strip # in JS -->
+          <input type="text" class="hex-input" id="hexInput" value="A855F7" maxlength="7" placeholder="A855F7">
         </div>
         <button class="gen-btn" onclick="generate()">Generate Palette</button>
         <button class="rand-btn" onclick="randomColor()">↺ Random</button>
+        <!-- FIX #8: Undo/Redo history buttons -->
+        <div class="history-btns">
+          <button class="hist-btn" id="undoBtn" onclick="historyUndo()" title="Undo (←)" disabled>◀</button>
+          <button class="hist-btn" id="redoBtn" onclick="historyRedo()" title="Redo (→)" disabled>▶</button>
+        </div>
       </div>
+      <!-- FIX #10: Keyboard shortcut hint -->
+      <p class="kbd-hint" style="margin-top:.7rem"><kbd>Space</kbd> Random &nbsp;·&nbsp; <kbd>←</kbd><kbd>→</kbd> History &nbsp;·&nbsp; <kbd>C</kbd> Copy hex &nbsp;·&nbsp; <kbd>1-6</kbd> Switch harmony</p>
     </div>
 
     <div class="palette-name-bar">
@@ -390,14 +487,32 @@ footer{background:rgba(228,209,250,.6);border-top:1px solid var(--border);text-a
         <span class="name-loading" id="nameLoading" style="display:none">naming…</span>
       </div>
       <div class="mode-row">
+        <!-- FIX #6: Added Split Complementary + Square/Tetradic modes -->
         <button class="mode-btn active" onclick="setMode('analogous',this)">Analogous</button>
         <button class="mode-btn" onclick="setMode('complementary',this)">Complement</button>
         <button class="mode-btn" onclick="setMode('triadic',this)">Triadic</button>
         <button class="mode-btn" onclick="setMode('shades',this)">Shades</button>
+        <button class="mode-btn" onclick="setMode('split',this)">Split Comp</button>
+        <button class="mode-btn" onclick="setMode('square',this)">Square</button>
       </div>
     </div>
     <div class="swatches" id="swatches"></div>
     <div class="dot-row" id="dotRow"></div>
+
+    <!-- FIX #7: WCAG Contrast Ratio Checker -->
+    <div class="contrast-section">
+      <div class="contrast-title">WCAG Contrast Ratios</div>
+      <div class="contrast-grid" id="contrastGrid"></div>
+    </div>
+
+    <!-- SPECIAL PAIRS SECTION -->
+    <div class="special-pairs-section">
+      <div class="special-pairs-title">✦ Special Colour Pairs</div>
+      <div class="special-pairs-grid" id="specialPairsGrid">
+        <div class="sp-empty">Generate a palette to see special pairs.</div>
+      </div>
+    </div>
+
     <div class="action-bar">
       <button class="act-btn primary" onclick="savePalette()">💾 Save</button>
       <button class="act-btn" onclick="openPreview()">👁 Preview</button>
@@ -408,8 +523,13 @@ footer{background:rgba(228,209,250,.6);border-top:1px solid var(--border);text-a
           <button class="exp-item" onclick="exportCSS()">🎨 CSS Vars</button>
           <button class="exp-item" onclick="exportJSON()">{ } JSON</button>
           <button class="exp-item" onclick="exportTailwind()">🌬 Tailwind</button>
+          <button class="exp-item" onclick="exportSVG()">◈ SVG</button>
         </div>
       </div>
+      <!-- Quick links to tools -->
+      <a class="act-btn ghost" href="https://coolors.co" target="_blank" rel="noopener" title="Coolors">🔗 Coolors</a>
+      <a class="act-btn ghost" href="https://paletton.com" target="_blank" rel="noopener" title="Paletton">🔗 Paletton</a>
+      <a class="act-btn ghost" href="https://color.adobe.com" target="_blank" rel="noopener" title="Adobe Color">🔗 Adobe Color</a>
     </div>
     <div class="chips" id="chips"></div>
   </div>
@@ -470,7 +590,7 @@ footer{background:rgba(228,209,250,.6);border-top:1px solid var(--border);text-a
   <!-- ══════════════════ FONT PAIRS ══════════════════ -->
   <div class="tab-content" id="tab-fonts">
     <div class="card">
-      <span class="field-label">AI Font Pairing Suggester</span>
+      <span class="field-label">Font Pairing Suggester</span>
       <div class="font-gen-bar">
         <select class="font-mood-select" id="fontMood">
           <option value="auto">Auto (match palette mood)</option>
@@ -481,10 +601,10 @@ footer{background:rgba(228,209,250,.6);border-top:1px solid var(--border);text-a
           <option value="tech">Tech & Digital</option>
         </select>
         <button class="act-btn primary" onclick="generateFontPairs()">✦ Suggest Font Pairs</button>
-        <span class="font-loading" id="fontLoading">AI thinking…</span>
+        <span class="font-loading" id="fontLoading">picking pairs…</span>
       </div>
       <div id="fontPairsOutput">
-        <div class="font-empty">Hit "Suggest Font Pairs" to get AI-curated Google Font combinations that match your palette.</div>
+        <div class="font-empty">Hit "Suggest Font Pairs" to get curated Google Font combinations that match your palette mood.</div>
       </div>
     </div>
   </div>
@@ -525,11 +645,92 @@ footer{background:rgba(228,209,250,.6);border-top:1px solid var(--border);text-a
         <img id="uploadedImg" src="" alt="uploaded">
       </div>
     </div>
+    <!-- FIX #11: visible error message for Canvas/CORS failures -->
+    <div class="extract-error" id="extractError">⚠ Could not read image colours. Try a different image or format.</div>
     <div class="extract-result" id="extractResult">
       <span class="field-label" style="margin-top:1.5rem;display:block">Extracted Colours</span>
       <div class="extract-swatches" id="extractSwatches"></div>
       <br>
       <button class="act-btn primary" onclick="useExtractedPalette()" style="margin-top:.5rem">→ Use this Palette</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════ COLOUR WHEEL ══════════════════ -->
+  <div class="tab-content" id="tab-colourwheel">
+    <div class="card" style="padding:1.6rem 1.8rem">
+      <span class="field-label">Interactive Colour Wheel</span>
+      <div class="cw-layout">
+        <!-- WHEEL CANVAS -->
+        <div class="cw-canvas-wrap" id="cwCanvasWrap">
+          <canvas id="cwCanvas" width="320" height="320"></canvas>
+        </div>
+        <!-- SIDE PANEL -->
+        <div class="cw-side">
+          <!-- Harmony selector -->
+          <div>
+            <div class="cw-section-title">Colour Harmonies</div>
+            <div class="cw-harmony-grid">
+              <button class="cw-harmony-btn active" data-harmony="analogous" onclick="setCwHarmony('analogous',this)">Analogous</button>
+              <button class="cw-harmony-btn" data-harmony="complementary" onclick="setCwHarmony('complementary',this)">Complementary</button>
+              <button class="cw-harmony-btn" data-harmony="split" onclick="setCwHarmony('split',this)">Split Comp</button>
+              <button class="cw-harmony-btn" data-harmony="triadic" onclick="setCwHarmony('triadic',this)">Triad</button>
+              <button class="cw-harmony-btn" data-harmony="square" onclick="setCwHarmony('square',this)">Square</button>
+              <button class="cw-harmony-btn" data-harmony="compound" onclick="setCwHarmony('compound',this)">Compound</button>
+              <button class="cw-harmony-btn" data-harmony="monochromatic" onclick="setCwHarmony('monochromatic',this)">Monochromatic</button>
+              <button class="cw-harmony-btn" data-harmony="custom" onclick="setCwHarmony('custom',this)">Custom</button>
+            </div>
+          </div>
+          <!-- Hue + Lightness sliders -->
+          <div>
+            <div class="cw-section-title">Adjust</div>
+            <div class="cw-hue-row">
+              <span class="cw-hue-label">Hue</span>
+              <input type="range" class="cw-hue-slider" id="cwHueSlider" min="0" max="360" value="280" oninput="setCwHue(+this.value)" style="background:linear-gradient(to right,#f00,#ff0,#0f0,#0ff,#00f,#f0f,#f00)">
+              <span id="cwHueVal" style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--muted);min-width:30px;text-align:right">280°</span>
+            </div>
+            <div class="cw-hue-row">
+              <span class="cw-sat-label">Light</span>
+              <input type="range" class="cw-hue-slider" id="cwLightSlider" min="25" max="75" value="55" oninput="setCwLight(+this.value)" style="background:linear-gradient(to right,#333,#a855f7,#fff)">
+              <span id="cwLightVal" style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--muted);min-width:30px;text-align:right">55%</span>
+            </div>
+          </div>
+          <!-- Generated palette preview -->
+          <div>
+            <div class="cw-section-title">Generated Palette</div>
+            <div class="cw-palette" id="cwPaletteBar"></div>
+            <div class="cw-dots-row" id="cwDotsRow"></div>
+            <!-- Custom mode controls -->
+            <div id="cwCustomControls" style="display:none;margin-top:0.8rem;gap:0.5rem;display:flex;flex-wrap:wrap">
+              <button class="act-btn primary" onclick="addCwCustomColor()" style="flex:1;font-size:0.7rem;padding:0.35rem 0.7rem">+ Add Color</button>
+              <button class="act-btn ghost" onclick="resetCwCustomAngles()" style="flex:1;font-size:0.7rem;padding:0.35rem 0.7rem">↻ Reset</button>
+            </div>
+          </div>
+          <!-- Colour info chips -->
+          <div>
+            <div class="cw-section-title">Base Colour</div>
+            <div class="cw-info-row">
+              <div class="cw-info-chip" onclick="navigator.clipboard.writeText(document.getElementById('cwChipHex').textContent).then(()=>showToast('Copied'))">
+                <div class="cw-chip-label">HEX</div>
+                <div class="cw-chip-val" id="cwChipHex">#A855F7</div>
+              </div>
+              <div class="cw-info-chip" onclick="navigator.clipboard.writeText(document.getElementById('cwChipHsl').textContent).then(()=>showToast('Copied'))">
+                <div class="cw-chip-label">HSL</div>
+                <div class="cw-chip-val" id="cwChipHsl">280 90% 55%</div>
+              </div>
+              <div class="cw-info-chip" onclick="navigator.clipboard.writeText(document.getElementById('cwChipRgb').textContent).then(()=>showToast('Copied'))">
+                <div class="cw-chip-label">RGB</div>
+                <div class="cw-chip-val" id="cwChipRgb">168,85,247</div>
+              </div>
+            </div>
+          </div>
+          <!-- Actions -->
+          <button class="cw-use-btn" onclick="useCwPalette()">→ Use this Palette</button>
+          <a class="cw-adobe-link" href="https://color.adobe.com/create/color-wheel" target="_blank" rel="noopener">
+            <svg class="cw-adobe-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M13.966 22.624l-1.69-4.281H8.122l3.892-9.144 5.662 13.425zM8.884 1.376H0v21.248zm6.23 0H24v21.248z"/></svg>
+            Open in Adobe Color Wheel ↗
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -563,7 +764,8 @@ footer{background:rgba(228,209,250,.6);border-top:1px solid var(--border);text-a
     <div class="footer-logo">Thunder<span>Technology</span> × Palettify</div>
     <div class="footer-divider"></div>
     <div class="footer-copy">
-      &copy; <span id="yr"></span> ThunderTechnology &nbsp;·&nbsp;
+      <!-- FIX #15: Fallback year in noscript, JS fills it -->
+      &copy; <span id="yr">2026</span> ThunderTechnology &nbsp;·&nbsp;
       <a href="https://www.youtube.com/@thundertechnologyofficial" target="_blank">YouTube</a> &nbsp;·&nbsp;
       <a href="https://www.instagram.com/thundertechnologyofficial" target="_blank">Instagram</a> &nbsp;·&nbsp; All rights reserved.
     </div>
@@ -600,6 +802,7 @@ footer{background:rgba(228,209,250,.6);border-top:1px solid var(--border);text-a
 <canvas id="hiddenCanvas" style="display:none"></canvas>
 
 <script>
+// FIX #15: Year always shows, JS updates it
 document.getElementById('yr').textContent = new Date().getFullYear();
 
 /* ════════════════ COLOUR MATH ════════════════ */
@@ -631,13 +834,107 @@ function hexToCmyk(hex){
 function textCol(hex){const[,,l]=hexToHsl(hex);return l>58?'#1e0a3c':'#ffffff';}
 function rgbToHex(r,g,b){return'#'+[r,g,b].map(v=>Math.min(255,Math.max(0,v)).toString(16).padStart(2,'0')).join('');}
 
+/* ════════════════ SPECIAL COLOUR PAIRS ════════════════ */
+// Pair 1: colour[0] (leftmost) + colour[4] (rightmost) — opposites
+// Pair 2: colour[1] (2nd left)  + colour[3] (2nd right) — inner opposites
+function renderSpecialPairs(colors){
+  const grid=document.getElementById('specialPairsGrid');
+  if(!colors||colors.length<4){grid.innerHTML='<div class="sp-empty">Need 4+ colours to show special pairs.</div>';return;}
+  const pairs=[
+    {a:colors[0],b:colors[4]||colors[colors.length-1],label:'Outer Pair · 1 & 5'},
+    {a:colors[1],b:colors[3],label:'Inner Pair · 2 & 4'}
+  ];
+  grid.innerHTML=pairs.map(({a,b,label})=>{
+    const ratio=contrastRatio(a,b);
+    const r=parseFloat(ratio);
+    const aaPass=r>=4.5,aaaPass=r>=7;
+    return`<div class="sp-card">
+      <div class="sp-well">
+        <div class="sp-half" style="background:${a};color:${textCol(a)}" onclick="copyColor('${a}')" title="Click to copy">
+          <span class="sp-half-hex">#${a.slice(1).toUpperCase()}</span>
+        </div>
+        <div class="sp-half" style="background:${b};color:${textCol(b)}" onclick="copyColor('${b}')" title="Click to copy">
+          <span class="sp-half-hex">#${b.slice(1).toUpperCase()}</span>
+        </div>
+      </div>
+      <div class="sp-info">
+        <span class="sp-label">${label}</span>
+        <div style="display:flex;align-items:center;gap:.5rem">
+          <span class="sp-contrast">${ratio}:1</span>
+          <div class="sp-badges">
+            <span class="wcag-badge ${aaaPass?'wcag-pass':'wcag-fail'}">AAA</span>
+            <span class="wcag-badge ${aaPass?'wcag-pass':'wcag-fail'}">AA</span>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* FIX #7: WCAG Contrast Ratio */
+function getLuminance(hex){
+  const{r,g,b}=hexToRgb(hex);
+  const [rs,gs,bs]=[r,g,b].map(c=>{c/=255;return c<=.03928?c/12.92:Math.pow((c+.055)/1.055,2.4);});
+  return .2126*rs+.7152*gs+.0722*bs;
+}
+function contrastRatio(h1,h2){
+  const l1=getLuminance(h1),l2=getLuminance(h2);
+  const light=Math.max(l1,l2),dark=Math.min(l1,l2);
+  return((light+.05)/(dark+.05)).toFixed(2);
+}
+function wcagBadge(ratio){
+  const r=parseFloat(ratio);
+  let badges='';
+  if(r>=7) badges+='<span class="wcag-badge wcag-pass">AAA</span>';
+  else badges+='<span class="wcag-badge wcag-fail">AAA</span>';
+  if(r>=4.5) badges+='<span class="wcag-badge wcag-pass">AA</span>';
+  else badges+='<span class="wcag-badge wcag-fail">AA</span>';
+  return badges;
+}
+function renderContrastGrid(colors){
+  const grid=document.getElementById('contrastGrid');
+  if(!colors.length){grid.innerHTML='';return;}
+  // compare each color against white and black
+  grid.innerHTML=colors.map((c,i)=>{
+    const vsWhite=contrastRatio(c,'#ffffff');
+    const vsBlack=contrastRatio(c,'#000000');
+    return`<div class="contrast-card">
+      <div class="contrast-pair">Color ${i+1} vs White</div>
+      <div class="contrast-ratio">${vsWhite}:1</div>
+      <div class="contrast-badges">${wcagBadge(vsWhite)}</div>
+      <div class="contrast-pair" style="margin-top:.5rem">Color ${i+1} vs Black</div>
+      <div class="contrast-ratio">${vsBlack}:1</div>
+      <div class="contrast-badges">${wcagBadge(vsBlack)}</div>
+    </div>`;
+  }).join('');
+}
+
 /* ════════════════ PALETTE GENERATORS ════════════════ */
 function getAnalogous(hex){const[h,s,l]=hexToHsl(hex);return[-40,-20,0,20,40].map(d=>hslToHex(h+d,Math.min(100,s+5),l));}
 function getComplementary(hex){const[h,s,l]=hexToHsl(hex);return[hslToHex(h,s,Math.min(88,l+30)),hslToHex(h,Math.min(100,s+8),l),hex,hslToHex(h+180,s,l),hslToHex(h+180,Math.min(100,s+8),Math.max(20,l-15))];}
 function getTriadic(hex){const[h,s,l]=hexToHsl(hex);return[hslToHex(h,s,Math.min(88,l+28)),hex,hslToHex(h+120,s,l),hslToHex(h+240,s,l),hslToHex(h+60,Math.max(18,s-18),Math.max(20,l-10))];}
 function getShades(hex){const[h,s]=hexToHsl(hex);return[88,72,56,40,24].map(l=>hslToHex(h,s,l));}
-function getPalette(hex,mode){switch(mode){case'complementary':return getComplementary(hex);case'triadic':return getTriadic(hex);case'shades':return getShades(hex);default:return getAnalogous(hex);}}
-const harmonyInfo={analogous:['Adjacent Hues','Serene','Cohesive'],complementary:['High Contrast','Dynamic','Bold'],triadic:['3-Point','Vibrant','Rich'],shades:['Monochromatic','Light → Dark','Elegant']};
+/* FIX #6: Split Complementary + Square/Tetradic */
+function getSplitComplementary(hex){const[h,s,l]=hexToHsl(hex);return[hex,hslToHex(h,s,Math.min(88,l+20)),hslToHex(h+150,s,l),hslToHex(h+210,s,l),hslToHex(h+180,Math.max(18,s-10),Math.min(88,l+15))];}
+function getSquare(hex){const[h,s,l]=hexToHsl(hex);return[0,90,180,270].map(d=>hslToHex(h+d,s,l)).concat([hslToHex(h+45,Math.max(18,s-15),Math.min(88,l+18))]);}
+function getPalette(hex,mode){
+  switch(mode){
+    case'complementary':return getComplementary(hex);
+    case'triadic':return getTriadic(hex);
+    case'shades':return getShades(hex);
+    case'split':return getSplitComplementary(hex);
+    case'square':return getSquare(hex);
+    default:return getAnalogous(hex);
+  }
+}
+const harmonyInfo={
+  analogous:['Adjacent Hues','Serene','Cohesive'],
+  complementary:['High Contrast','Dynamic','Bold'],
+  triadic:['3-Point','Vibrant','Rich'],
+  shades:['Monochromatic','Light → Dark','Elegant'],
+  split:['Split Comp','Nuanced','Balanced'],
+  square:['Tetradic','Diverse','Complex']
+};
 
 /* ════════════════ STATE ════════════════ */
 let currentHex='#a855f7', currentMode='analogous', currentColors=[], currentName='';
@@ -645,22 +942,72 @@ let builderColors=['#a855f7','#c084fc','#7c3aed','#e879f9','#4c1d95'];
 let wallpaperPaused=false, wallpaperAnim=null;
 let extractedColors=[];
 
-/* ════════════════ AI PALETTE NAME ════════════════ */
-async function generatePaletteName(colors){
+/* FIX #8: Palette history (undo/redo) */
+let paletteHistory=[], historyIndex=-1;
+function pushHistory(colors,hex,mode,name){
+  // trim forward history on new action
+  paletteHistory=paletteHistory.slice(0,historyIndex+1);
+  paletteHistory.push({colors:[...colors],hex,mode,name});
+  if(paletteHistory.length>20)paletteHistory.shift();
+  historyIndex=paletteHistory.length-1;
+  updateHistoryBtns();
+}
+function updateHistoryBtns(){
+  document.getElementById('undoBtn').disabled=historyIndex<=0;
+  document.getElementById('redoBtn').disabled=historyIndex>=paletteHistory.length-1;
+}
+function historyUndo(){
+  if(historyIndex<=0)return;
+  historyIndex--;
+  const h=paletteHistory[historyIndex];
+  currentHex=h.hex;currentMode=h.mode;currentName=h.name;
+  circleFace.style.background=h.hex;circleFace.style.boxShadow=`0 0 20px ${h.hex}55`;
+  picker.value=h.hex;hexInput.value=h.hex.slice(1).toUpperCase();
+  document.querySelectorAll('.mode-btn').forEach(b=>b.classList.toggle('active',b.textContent.toLowerCase().replace(/\s/g,'').includes(h.mode.replace('split','split').replace('square','square'))));
+  renderOnly(h.colors);document.getElementById('nameText').textContent=h.name||'—';
+  updateHistoryBtns();showToast('↩ Undo');
+}
+function historyRedo(){
+  if(historyIndex>=paletteHistory.length-1)return;
+  historyIndex++;
+  const h=paletteHistory[historyIndex];
+  currentHex=h.hex;currentMode=h.mode;currentName=h.name;
+  circleFace.style.background=h.hex;circleFace.style.boxShadow=`0 0 20px ${h.hex}55`;
+  picker.value=h.hex;hexInput.value=h.hex.slice(1).toUpperCase();
+  renderOnly(h.colors);document.getElementById('nameText').textContent=h.name||'—';
+  updateHistoryBtns();showToast('↪ Redo');
+}
+
+/* FIX #9: Palette name — local generator, no API */
+let lastNamedHex='';
+const NAME_PARTS={
+  adj:['Velvet','Misty','Solar','Dusk','Arctic','Ember','Orchid','Cosmic','Faded','Neon','Wild','Deep','Lunar','Gilded','Rustic','Hazy','Electric','Pastel','Shadow','Crystal'],
+  noun:['Dream','Storm','Tide','Grove','Bloom','Forge','Mirage','Canvas','Shift','Veil','Glow','Echo','Prism','Dune','Horizon','Mist','Spark','Reef','Vale','Aura']
+};
+function localPaletteName(hex){
+  const[h,s,l]=hexToHsl(hex);
+  // pick deterministically from hex so same colour = same name
+  const n=parseInt(hex.slice(1),16);
+  const adj=NAME_PARTS.adj[n%NAME_PARTS.adj.length];
+  const noun=NAME_PARTS.noun[Math.floor(n/NAME_PARTS.adj.length)%NAME_PARTS.noun.length];
+  return adj+' '+noun;
+}
+function generatePaletteName(colors,hex){
+  if(hex===lastNamedHex&&currentName){document.getElementById('nameText').textContent=currentName;return;}
+  lastNamedHex=hex;
   const nameEl=document.getElementById('nameText'),loadEl=document.getElementById('nameLoading');
   nameEl.style.display='none';loadEl.style.display='inline';
-  try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:40,
-        messages:[{role:'user',content:`Give a creative poetic 2-3 word name for a colour palette: ${colors.join(', ')}. Reply with ONLY the name, nothing else.`}]})});
-    const data=await res.json();
-    currentName=data.content?.[0]?.text?.trim()||'Unnamed Palette';
-  }catch{currentName='My Palette';}
-  nameEl.textContent=currentName;nameEl.style.display='inline';loadEl.style.display='none';
+  // slight delay for UX feel
+  setTimeout(()=>{
+    currentName=localPaletteName(hex);
+    nameEl.textContent=currentName;nameEl.style.display='inline';loadEl.style.display='none';
+    if(paletteHistory[historyIndex])paletteHistory[historyIndex].name=currentName;
+  },280);
 }
 
 /* ════════════════ RENDER PALETTE ════════════════ */
-function render(colors){
+// renderOnly: just render, no history push (used by undo/redo)
+function renderOnly(colors){
   currentColors=[...colors];
   document.getElementById('swatches').innerHTML=colors.map((c,i)=>`
     <div class="swatch" style="background:${c};color:${textCol(c)}" onclick="copyColor('${c}')">
@@ -674,8 +1021,13 @@ function render(colors){
       <div class="dot-hex">#${c.slice(1).toUpperCase()}</div>
     </div>`).join('');
   document.getElementById('chips').innerHTML=(harmonyInfo[currentMode]||[]).map(t=>`<span class="chip">${t}</span>`).join('');
+  renderContrastGrid(colors);
+  renderSpecialPairs(colors);
   updateTsPaletteDots();
   updateCVD();
+}
+function render(colors){
+  renderOnly(colors);
 }
 
 function generate(){
@@ -683,13 +1035,20 @@ function generate(){
   if(!/^#[0-9A-Fa-f]{6}$/.test(hex))return;
   const colors=getPalette(hex,currentMode);
   render(colors);
-  generatePaletteName(colors);
+  generatePaletteName(colors,hex);
+  pushHistory(colors,hex,currentMode,'');
 }
 
 function setMode(mode,btn){
   currentMode=mode;
   document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');generate();
+  btn.classList.add('active');
+  // FIX #9: mode switch reuses same name, just re-renders
+  const hex=currentHex.startsWith('#')?currentHex:'#'+currentHex;
+  const colors=getPalette(hex,currentMode);
+  render(colors);
+  document.getElementById('nameText').textContent=currentName||'—';
+  pushHistory(colors,hex,currentMode,currentName);
 }
 
 const picker=document.getElementById('colorPicker'),hexInput=document.getElementById('hexInput'),circleFace=document.getElementById('circleFace');
@@ -698,20 +1057,45 @@ function applyColor(v){
   picker.value=v;hexInput.value=v.slice(1).toUpperCase();generate();
 }
 picker.addEventListener('input',e=>applyColor(e.target.value));
-hexInput.addEventListener('input',e=>{let v=e.target.value.replace(/[^0-9A-Fa-f]/g,'').toUpperCase();e.target.value=v;if(v.length===6)applyColor('#'+v);});
-hexInput.addEventListener('keydown',e=>{if(e.key==='Enter'&&hexInput.value.length===6)applyColor('#'+hexInput.value);});
+hexInput.addEventListener('input',e=>{
+  // FIX #5: strip leading # if user pastes #RRGGBB
+  let v=e.target.value.replace(/[^0-9A-Fa-f#]/g,'').toUpperCase();
+  if(v.startsWith('#'))v=v.slice(1);
+  v=v.slice(0,6);
+  e.target.value=v;
+  if(v.length===6)applyColor('#'+v);
+});
+hexInput.addEventListener('keydown',e=>{if(e.key==='Enter'&&hexInput.value.replace('#','').length===6)applyColor('#'+hexInput.value.replace('#',''));});
 function randomColor(){applyColor('#'+Math.floor(Math.random()*0xFFFFFF).toString(16).padStart(6,'0'));}
+
+/* FIX #10: Keyboard shortcuts */
+document.addEventListener('keydown',e=>{
+  const tag=document.activeElement.tagName.toLowerCase();
+  if(tag==='input'||tag==='textarea'||tag==='select')return;
+  switch(e.key){
+    case' ':e.preventDefault();randomColor();break;
+    case'ArrowLeft':historyUndo();break;
+    case'ArrowRight':historyRedo();break;
+    case'c':case'C':
+      if(currentColors.length&&!e.ctrlKey&&!e.metaKey){copyColor(currentColors[0]);showToast('✓ Copied '+currentColors[0].toUpperCase());}
+      break;
+    case'1':setMode('analogous',document.querySelector('.mode-btn:nth-child(1)'));break;
+    case'2':setMode('complementary',document.querySelector('.mode-btn:nth-child(2)'));break;
+    case'3':setMode('triadic',document.querySelector('.mode-btn:nth-child(3)'));break;
+    case'4':setMode('shades',document.querySelector('.mode-btn:nth-child(4)'));break;
+    case'5':setMode('split',document.querySelector('.mode-btn:nth-child(5)'));break;
+    case'6':setMode('square',document.querySelector('.mode-btn:nth-child(6)'));break;
+  }
+});
 
 /* ════════════════ TINT & SHADE EXPLORER ════════════════ */
 function updateTsPaletteDots(){
   document.getElementById('tsPaletteDots').innerHTML=currentColors.map((c,i)=>`
     <div class="ts-dot" style="background:${c}" title="${c.toUpperCase()}" onclick="exploreTintShade('${c}',${i})"></div>`).join('');
 }
-
 document.getElementById('tsColorInput').addEventListener('input',e=>{
   const v=e.target.value;document.getElementById('tsPicker').style.background=v;exploreTintShade(v,-1);
 });
-
 function exploreTintShade(hex,dotIdx){
   document.querySelectorAll('.ts-dot').forEach((d,i)=>d.classList.toggle('active',i===dotIdx));
   document.getElementById('tsPicker').style.background=hex;
@@ -743,7 +1127,6 @@ function exploreTintShade(hex,dotIdx){
 }
 
 /* ════════════════ COLOUR BLINDNESS SIMULATOR ════════════════ */
-// Standard CVD simulation matrices
 const cvdMatrices={
   normal:{name:'Normal Vision',desc:'How everyone else sees it',m:[[1,0,0],[0,1,0],[0,0,1]]},
   deuteranopia:{name:'Deuteranopia',desc:'Green-blind (~6% of males)',m:[[0.367,0.861,-0.228],[0.280,0.673,0.047],[-0.012,0.043,0.969]]},
@@ -751,28 +1134,20 @@ const cvdMatrices={
   tritanopia:{name:'Tritanopia',desc:'Blue-blind (rare)',m:[[1.256,-0.077,-0.179],[-0.078,0.931,0.148],[0.004,0.691,0.305]]},
   achromatopsia:{name:'Achromatopsia',desc:'Total colour blindness (very rare)',m:[[0.299,0.587,0.114],[0.299,0.587,0.114],[0.299,0.587,0.114]]}
 };
-
 function simulateCVD(hex,matrix){
   const{r,g,b}=hexToRgb(hex);
-  const rr=r/255,gg=g/255,bb=b/255;
-  const m=matrix;
+  const rr=r/255,gg=g/255,bb=b/255;const m=matrix;
   const nr=Math.round(Math.min(1,Math.max(0,m[0][0]*rr+m[0][1]*gg+m[0][2]*bb))*255);
   const ng=Math.round(Math.min(1,Math.max(0,m[1][0]*rr+m[1][1]*gg+m[1][2]*bb))*255);
   const nb=Math.round(Math.min(1,Math.max(0,m[2][0]*rr+m[2][1]*gg+m[2][2]*bb))*255);
   return rgbToHex(nr,ng,nb);
 }
-
 function updateCVD(){
   if(!currentColors.length){document.getElementById('cvdGrid').innerHTML='<div class="cvd-empty">Generate a palette first.</div>';return;}
   document.getElementById('cvdGrid').innerHTML=Object.entries(cvdMatrices).map(([k,{name,desc,m}])=>`
     <div class="cvd-card">
-      <div class="cvd-label-bar">
-        <span class="cvd-label">${name}</span>
-        <span class="cvd-desc">${desc}</span>
-      </div>
-      <div class="cvd-swatches">
-        ${currentColors.map(c=>`<div class="cvd-swatch" style="background:${simulateCVD(c,m)}" title="${simulateCVD(c,m)}"></div>`).join('')}
-      </div>
+      <div class="cvd-label-bar"><span class="cvd-label">${name}</span><span class="cvd-desc">${desc}</span></div>
+      <div class="cvd-swatches">${currentColors.map(c=>`<div class="cvd-swatch" style="background:${simulateCVD(c,m)}" title="${simulateCVD(c,m)}"></div>`).join('')}</div>
     </div>`).join('');
 }
 
@@ -786,7 +1161,6 @@ function initBuilder(){
       </div>
       <div class="builder-hex-mini" id="bHex${i}">${c.slice(1).toUpperCase()}</div>
     </div>`).join('');
-  // watch changes
   document.querySelectorAll('.builder-circle-wrap input').forEach((inp,i)=>{
     inp.addEventListener('input',e=>{
       builderColors[i]=e.target.value;
@@ -797,22 +1171,19 @@ function initBuilder(){
   });
   updateBuilderPreview();
 }
-
 function updateBuilderPreview(){
   document.getElementById('builderPreview').innerHTML=builderColors.map(c=>`<div class="builder-preview-swatch" style="background:${c}"></div>`).join('');
 }
-
 function useBuiltPalette(){
   currentColors=[...builderColors];render(currentColors);
   currentName='Custom Palette';document.getElementById('nameText').textContent='Custom Palette';
-  switchTab('generate',document.querySelector('.tab-btn'));showToast('Custom palette loaded!');
+  // FIX #2: correct tab button lookup
+  switchTab('generate',document.querySelector('[data-tab="generate"]'));showToast('Custom palette loaded!');
 }
-
 function randomiseBuilder(){
   builderColors=Array.from({length:5},()=>'#'+Math.floor(Math.random()*0xFFFFFF).toString(16).padStart(6,'0'));
   initBuilder();
 }
-
 function loadCurrentToBuilder(){
   if(!currentColors.length)return;
   builderColors=[...currentColors];initBuilder();showToast('Current palette loaded into builder');
@@ -835,7 +1206,7 @@ function renderMixer(){
       <div class="mixer-plus">⊕</div>
       <div>
         <div class="mixer-label">Palette B</div>
-        <select class="mixer-select" id="mixB" onchange="previewMix()">${opts.replace('value="0"','value="0"').replace('selected','')}</select>
+        <select class="mixer-select" id="mixB" onchange="previewMix()">${opts}</select>
         <div class="mini-palette" id="miniB">${saved[Math.min(1,saved.length-1)].colors.map(c=>`<div class="mini-swatch" style="background:${c}"></div>`).join('')}</div>
       </div>
     </div>
@@ -850,16 +1221,14 @@ function renderMixer(){
       <button class="act-btn primary" onclick="useMixedPalette()">→ Use Mixed Palette</button>
       <button class="act-btn" onclick="saveMixedPalette()">💾 Save Mixed</button>
     </div>`;
-  // set B default to 1
-  document.getElementById('mixB').value=1;
+  // FIX #3: correctly set Palette B to index 1
+  document.getElementById('mixB').selectedIndex=Math.min(1,saved.length-1);
   previewMix();
 }
-
 function blendHex(h1,h2,t){
   const a=hexToHsl(h1),b=hexToHsl(h2);
   return hslToHex(a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t,a[2]+(b[2]-a[2])*t);
 }
-
 let mixedColors=[];
 function previewMix(){
   const saved=getSaved();
@@ -872,12 +1241,12 @@ function previewMix(){
   mixedColors=pA.colors.map((c,i)=>blendHex(c,pB.colors[i]||c,t));
   document.getElementById('mixPreview').innerHTML=mixedColors.map(c=>`<div class="mixer-swatch" style="background:${c}"></div>`).join('');
 }
-
 function useMixedPalette(){
   if(!mixedColors.length)return;
   currentColors=[...mixedColors];render(currentColors);
   currentName='Mixed Palette';document.getElementById('nameText').textContent='Mixed Palette';
-  switchTab('generate',document.querySelector('.tab-btn'));showToast('Mixed palette loaded!');
+  // FIX #2
+  switchTab('generate',document.querySelector('[data-tab="generate"]'));showToast('Mixed palette loaded!');
 }
 function saveMixedPalette(){
   if(!mixedColors.length)return;
@@ -887,79 +1256,95 @@ function saveMixedPalette(){
   renderSaved();showToast('💾 Mixed palette saved!');
 }
 
-/* ════════════════ FONT PAIRING ════════════════ */
-async function generateFontPairs(){
+/* ════════════════ FONT PAIRING — local curated library (no API) ════════════════ */
+const FONT_LIBRARY={
+  elegant:[
+    {display:'Cormorant Garamond',body:'Raleway',mood:'Luxurious',demoHead:'Timeless Elegance',demoBody:'Crafted with care, designed to inspire lasting impressions.'},
+    {display:'Playfair Display',body:'Lato',mood:'Editorial',demoHead:'The Art of Design',demoBody:'Beauty lives in the details of every thoughtful composition.'},
+    {display:'IM Fell English',body:'Libre Baskerville',mood:'Classic',demoHead:'Heritage & Grace',demoBody:'Tradition refined through the lens of modern sensibility.'}
+  ],
+  modern:[
+    {display:'Space Grotesk',body:'Inter',mood:'Clean',demoHead:'Future Forward',demoBody:'Simple, precise, and built for a world that moves fast.'},
+    {display:'DM Sans',body:'DM Mono',mood:'Minimal',demoHead:'Less is More',demoBody:'Every element serves a purpose in a well-designed system.'},
+    {display:'Outfit',body:'Manrope',mood:'Friendly',demoHead:'Beautifully Simple',demoBody:'Modern design that feels human and approachable.'}
+  ],
+  playful:[
+    {display:'Nunito',body:'Quicksand',mood:'Bubbly',demoHead:'Hello, World!',demoBody:'Bright ideas deserve fonts that smile back at you.'},
+    {display:'Pacifico',body:'Nunito Sans',mood:'Fun',demoHead:'Let\'s Create!',demoBody:'Good vibes and great design go hand in hand.'},
+    {display:'Righteous',body:'Poppins',mood:'Energetic',demoHead:'Make it Pop',demoBody:'Bold strokes and lively curves for adventurous brands.'}
+  ],
+  editorial:[
+    {display:'Merriweather',body:'Source Sans 3',mood:'Journalistic',demoHead:'The Full Story',demoBody:'In-depth reporting backed by clarity and typographic authority.'},
+    {display:'Libre Baskerville',body:'Libre Franklin',mood:'Scholarly',demoHead:'Ideas Worth Reading',demoBody:'Long-form content deserves type that respects every word.'},
+    {display:'Lora',body:'Open Sans',mood:'Literary',demoHead:'Words that Endure',demoBody:'A fine balance between warmth and journalistic precision.'}
+  ],
+  tech:[
+    {display:'JetBrains Mono',body:'IBM Plex Sans',mood:'Developer',demoHead:'Build the Future',demoBody:'Precision-engineered type for technical products that mean business.'},
+    {display:'Fira Code',body:'Fira Sans',mood:'Monospace',demoHead:'Ship It',demoBody:'Clean, legible, and perfectly suited to digital interfaces.'},
+    {display:'Space Mono',body:'Space Grotesk',mood:'Futuristic',demoHead:'01 Hello World',demoBody:'Interfaces of tomorrow, designed with today\'s clarity.'}
+  ],
+  auto:[
+    {display:'Playfair Display',body:'Source Sans 3',mood:'Versatile',demoHead:'Inspired by Colour',demoBody:'Your palette deserves typography that amplifies its character.'},
+    {display:'Josefin Sans',body:'Crimson Pro',mood:'Contrast',demoHead:'Harmony in Type',demoBody:'Bold display meets refined body — a classic pairing for any mood.'},
+    {display:'Montserrat',body:'Merriweather',mood:'Balanced',demoHead:'Crafted Together',demoBody:'Strong geometry above, warm serif below — tried and true.'}
+  ]
+};
+
+function generateFontPairs(){
   if(!currentColors.length){showToast('Generate a palette first!');return;}
   const loadEl=document.getElementById('fontLoading'),out=document.getElementById('fontPairsOutput');
   const mood=document.getElementById('fontMood').value;
   loadEl.style.display='inline';out.innerHTML='';
-  const moodText=mood==='auto'?`palette colours ${currentColors.join(', ')}`:`${mood} mood, palette: ${currentColors.join(', ')}`;
-  try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:600,
-        messages:[{role:'user',content:`Suggest 3 Google Font pairings for a design with this ${moodText}.
-Return ONLY valid JSON array, no markdown, no explanation:
-[{"display":"FontName","body":"FontName","mood":"one word mood","demoHead":"Short heading text","demoBody":"One sentence body text."}]`}]})});
-    const data=await res.json();
-    let txt=data.content?.[0]?.text?.trim()||'[]';
-    txt=txt.replace(/```json|```/g,'').trim();
-    const pairs=JSON.parse(txt);
-    // load Google Fonts
+  setTimeout(()=>{
+    const pairs=FONT_LIBRARY[mood]||FONT_LIBRARY.auto;
     const allFonts=[...new Set(pairs.flatMap(p=>[p.display,p.body]))];
+    // Load fonts from Google Fonts
+    const existing=[...document.querySelectorAll('link[data-fontpairs]')];existing.forEach(l=>l.remove());
     const link=document.createElement('link');
-    link.rel='stylesheet';
-    link.href='https://fonts.googleapis.com/css2?'+allFonts.map(f=>`family=${f.replace(/ /g,'+')}:wght@400;700`).join('&');
+    link.rel='stylesheet';link.setAttribute('data-fontpairs','1');
+    link.href='https://fonts.googleapis.com/css2?'+allFonts.map(f=>`family=${encodeURIComponent(f).replace(/%20/g,'+')}:wght@400;700`).join('&')+'&display=swap';
     document.head.appendChild(link);
-    setTimeout(()=>{
-      out.innerHTML=`<div class="font-pairs">${pairs.map(p=>`
-        <div class="font-card">
-          <div class="font-pair-names">
-            <span class="font-name">${p.display}</span>
-            <span class="font-pair-plus">+</span>
-            <span class="font-name">${p.body}</span>
-          </div>
-          <div class="font-demo-head" style="font-family:'${p.display}',serif">${p.demoHead}</div>
-          <div class="font-demo-body" style="font-family:'${p.body}',sans-serif">${p.demoBody}</div>
-          <div class="font-mood-tag">Mood: ${p.mood}</div>
-        </div>`).join('')}</div>`;
-    },600);
-  }catch(e){
-    out.innerHTML='<div class="font-empty">Could not generate font pairs. Try again!</div>';
-  }
-  loadEl.style.display='none';
+    out.innerHTML=`<div class="font-pairs">${pairs.map(p=>`
+      <div class="font-card">
+        <div class="font-pair-names">
+          <span class="font-name">${p.display}</span>
+          <span class="font-pair-plus">+</span>
+          <span class="font-name">${p.body}</span>
+        </div>
+        <div class="font-demo-head" style="font-family:'${p.display}',serif,sans-serif">${p.demoHead}</div>
+        <div class="font-demo-body" style="font-family:'${p.body}',sans-serif,serif">${p.demoBody}</div>
+        <div class="font-mood-tag">Mood: ${p.mood}</div>
+      </div>`).join('')}</div>`;
+    loadEl.style.display='none';
+  },420);
 }
 
 /* ════════════════ ANIMATED WALLPAPER ════════════════ */
 let wlCtx, wlBlobs=[], wlFrame=0;
-
 function initWallpaper(){
   const canvas=document.getElementById('wallpaperCanvas');
   wlCtx=canvas.getContext('2d');
   canvas.onclick=()=>{wallpaperPaused=!wallpaperPaused;if(!wallpaperPaused)animateWallpaper();};
   restartWallpaper();
 }
-
 function restartWallpaper(){
   if(wallpaperAnim)cancelAnimationFrame(wallpaperAnim);
-  wlFrame=0;
+  wallpaperAnim=null;wlFrame=0;
   const colors=currentColors.length?currentColors:['#a855f7','#c084fc','#7c3aed','#e879f9','#4c1d95'];
   const style=document.getElementById('wlStyle').value;
   const speed={'slow':0.3,'normal':0.7,'fast':1.5}[document.getElementById('wlSpeed').value]||0.7;
   const canvas=document.getElementById('wallpaperCanvas');
   const W=canvas.width,H=canvas.height;
-  // create blobs
   wlBlobs=colors.map((c,i)=>({
     x:Math.random()*W,y:Math.random()*H,
     vx:(Math.random()-.5)*speed,vy:(Math.random()-.5)*speed,
-    r:120+Math.random()*160,color:c,
-    phase:Math.random()*Math.PI*2
+    r:120+Math.random()*160,color:c,phase:Math.random()*Math.PI*2
   }));
   function frame(){
     if(wallpaperPaused)return;
     wlFrame++;
     const ctx=wlCtx;
     ctx.clearRect(0,0,W,H);
-    // bg
     ctx.fillStyle=colors[0];ctx.fillRect(0,0,W,H);
     if(style==='blobs'||style==='aurora'){
       wlBlobs.forEach(b=>{
@@ -1007,7 +1392,6 @@ function restartWallpaper(){
   frame();
 }
 let animateWallpaper=()=>{};
-
 function downloadWallpaper(){
   const canvas=document.getElementById('wallpaperCanvas');
   canvas.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='palettify-wallpaper.png';a.click();},'image/png');
@@ -1015,17 +1399,18 @@ function downloadWallpaper(){
 }
 
 /* ════════════════ EXPORT ════════════════ */
+// FIX #1: export menu closes on outside click (was already there but reinforced)
 function toggleExportMenu(){document.getElementById('exportMenu').classList.toggle('open');}
 document.addEventListener('click',e=>{if(!e.target.closest('.export-wrap'))document.getElementById('exportMenu').classList.remove('open');});
 
 function exportCSS(){
   const vars=currentColors.map((c,i)=>`  --color-${i+1}: ${c.toUpperCase()};`).join('\n');
   downloadText(`/* ${currentName} — Palettify by Thunder Technology */\n:root {\n${vars}\n}`,'palette.css','text/css');
-  showToast('CSS downloaded!');
+  showToast('CSS downloaded!');toggleExportMenu();
 }
 function exportJSON(){
   downloadText(JSON.stringify({name:currentName,mode:currentMode,colors:currentColors.map(c=>c.toUpperCase()),source:'Palettify by Thunder Technology'},null,2),'palette.json','application/json');
-  showToast('JSON downloaded!');
+  showToast('JSON downloaded!');toggleExportMenu();
 }
 function exportPNG(){
   const canvas=document.getElementById('hiddenCanvas');
@@ -1038,58 +1423,84 @@ function exportPNG(){
   ctx.fillStyle='#4c1d95';ctx.font='bold 20px serif';ctx.textAlign='left';ctx.fillText(currentName,PAD,H+36);
   ctx.fillStyle='#9170b8';ctx.font='14px monospace';ctx.textAlign='right';ctx.fillText('Palettify by Thunder Technology',W-PAD,H+36);
   canvas.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='palette.png';a.click();},'image/png');
-  showToast('PNG downloaded!');
+  showToast('PNG downloaded!');toggleExportMenu();
 }
 function exportTailwind(){
   const obj=currentColors.map((c,i)=>`    '${i+1}': '${c.toUpperCase()}'`).join(',\n');
   downloadText(`// ${currentName} — Palettify by Thunder Technology\nmodule.exports = {\n  theme: {\n    extend: {\n      colors: {\n        palette: {\n${obj}\n        }\n      }\n    }\n  }\n}`,'tailwind.palette.js','text/javascript');
-  showToast('Tailwind config downloaded!');
+  showToast('Tailwind config downloaded!');toggleExportMenu();
+}
+function exportSVG(){
+  const w=800,h=200,sw=w/currentColors.length;
+  const rects=currentColors.map((c,i)=>`<rect x="${i*sw}" y="0" width="${sw}" height="${h}" fill="${c}"/>`).join('');
+  const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">${rects}</svg>`;
+  downloadText(svg,'palette.svg','image/svg+xml');
+  showToast('SVG downloaded!');toggleExportMenu();
 }
 function downloadText(content,filename,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([content],{type}));a.download=filename;a.click();}
 
 /* ════════════════ IMAGE EXTRACTOR ════════════════ */
 function handleImageUpload(input){
   const file=input.files[0];if(!file)return;
+  document.getElementById('extractError').style.display='none';
   const reader=new FileReader();
   reader.onload=e=>{
     const img=document.getElementById('uploadedImg');img.src=e.target.result;
     document.getElementById('uploadPreview').style.display='block';
-    img.onload=()=>extractColors(img);
-  };reader.readAsDataURL(file);
+    img.onload=()=>{
+      try{extractColors(img);}
+      catch(err){
+        // FIX #11: show error on Canvas failure
+        document.getElementById('extractError').style.display='block';
+        document.getElementById('extractResult').style.display='none';
+      }
+    };
+  };
+  reader.onerror=()=>{document.getElementById('extractError').style.display='block';};
+  reader.readAsDataURL(file);
 }
 function extractColors(img){
   const canvas=document.createElement('canvas'),size=120;canvas.width=size;canvas.height=size;
-  const ctx=canvas.getContext('2d');ctx.drawImage(img,0,0,size,size);
-  const data=ctx.getImageData(0,0,size,size).data;
-  const buckets={};
-  for(let i=0;i<data.length;i+=16){
-    const r=Math.round(data[i]/32)*32,g=Math.round(data[i+1]/32)*32,b=Math.round(data[i+2]/32)*32;
-    if(data[i+3]<128)continue;
-    const key=`${r},${g},${b}`;
-    if(!buckets[key])buckets[key]={r,g,b,count:0};
-    buckets[key].count++;
+  const ctx=canvas.getContext('2d');
+  try{
+    ctx.drawImage(img,0,0,size,size);
+    const data=ctx.getImageData(0,0,size,size).data;
+    const buckets={};
+    for(let i=0;i<data.length;i+=16){
+      const r=Math.round(data[i]/32)*32,g=Math.round(data[i+1]/32)*32,b=Math.round(data[i+2]/32)*32;
+      if(data[i+3]<128)continue;
+      const key=`${r},${g},${b}`;
+      if(!buckets[key])buckets[key]={r,g,b,count:0};
+      buckets[key].count++;
+    }
+    const sorted=Object.values(buckets).sort((a,b)=>b.count-a.count);
+    const picked=[];
+    for(const c of sorted){
+      if(picked.length>=5)break;
+      const hex=rgbToHex(Math.min(255,c.r),Math.min(255,c.g),Math.min(255,c.b));
+      if(!picked.length||picked.every(p=>colorDist(p,hex)>60))picked.push(hex);
+    }
+    while(picked.length<5)picked.push(picked[picked.length-1]||'#cccccc');
+    extractedColors=picked;
+    document.getElementById('extractSwatches').innerHTML=picked.map(c=>`
+      <div class="extract-swatch" style="background:${c};color:${textCol(c)}" onclick="copyColor('${c}')">
+        <span class="extract-hex">${c.toUpperCase()}</span>
+      </div>`).join('');
+    document.getElementById('extractResult').style.display='block';
+    document.getElementById('extractError').style.display='none';
+  }catch(err){
+    document.getElementById('extractError').style.display='block';
+    document.getElementById('extractResult').style.display='none';
+    throw err;
   }
-  const sorted=Object.values(buckets).sort((a,b)=>b.count-a.count);
-  const picked=[];
-  for(const c of sorted){
-    if(picked.length>=5)break;
-    const hex=rgbToHex(Math.min(255,c.r),Math.min(255,c.g),Math.min(255,c.b));
-    if(!picked.length||picked.every(p=>colorDist(p,hex)>60))picked.push(hex);
-  }
-  while(picked.length<5)picked.push(picked[picked.length-1]||'#cccccc');
-  extractedColors=picked;
-  document.getElementById('extractSwatches').innerHTML=picked.map(c=>`
-    <div class="extract-swatch" style="background:${c};color:${textCol(c)}" onclick="copyColor('${c}')">
-      <span class="extract-hex">${c.toUpperCase()}</span>
-    </div>`).join('');
-  document.getElementById('extractResult').style.display='block';
 }
 function colorDist(h1,h2){const a=hexToRgb(h1),b=hexToRgb(h2);return Math.sqrt((a.r-b.r)**2+(a.g-b.g)**2+(a.b-b.b)**2);}
 function useExtractedPalette(){
   if(!extractedColors.length)return;
   currentColors=[...extractedColors];render(currentColors);
   currentName='Extracted Palette';document.getElementById('nameText').textContent='Extracted Palette';
-  switchTab('generate',document.querySelector('.tab-btn'));showToast('Extracted palette loaded!');
+  // FIX #2
+  switchTab('generate',document.querySelector('[data-tab="generate"]'));showToast('Extracted palette loaded!');
 }
 const zone=document.getElementById('uploadZone');
 zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('drag-over');});
@@ -1109,16 +1520,18 @@ function clearAllSaved(){if(!confirm('Clear all saved palettes?'))return;localSt
 function loadSaved(id){
   const p=getSaved().find(x=>x.id===id);if(!p)return;
   currentColors=[...p.colors];currentMode=p.mode;currentName=p.name;
-  document.querySelectorAll('.mode-btn').forEach(b=>b.classList.toggle('active',b.textContent.toLowerCase().includes(p.mode)));
+  document.querySelectorAll('.mode-btn').forEach(b=>b.classList.toggle('active',b.textContent.toLowerCase().replace(/\s/g,'').includes(p.mode)));
   render(p.colors);document.getElementById('nameText').textContent=p.name;
-  switchTab('generate',document.querySelector('.tab-btn'));showToast(`Loaded: ${p.name}`);
+  // FIX #2: correct tab button via data-tab attribute
+  switchTab('generate',document.querySelector('[data-tab="generate"]'));showToast(`Loaded: ${p.name}`);
 }
 function renderSaved(){
   const saved=getSaved();
   const grid=document.getElementById('savedGrid'),empty=document.getElementById('savedEmpty');
+  // FIX #12: savedBadge now exists — safe to use
   const badge=document.getElementById('savedBadge');
   document.getElementById('savedCount').textContent=`${saved.length} palette${saved.length!==1?'s':''}`;
-  badge.textContent=saved.length;badge.style.display=saved.length?'inline':'none';
+  if(badge){badge.textContent=saved.length;badge.style.display=saved.length?'inline':'none';}
   if(!saved.length){grid.innerHTML='';empty.style.display='block';return;}
   empty.style.display='none';
   grid.innerHTML=saved.map(p=>`
@@ -1191,19 +1604,401 @@ function switchTab(name,btn){
   if(name==='saved')renderSaved();
   if(name==='mixer')renderMixer();
   if(name==='blindness')updateCVD();
-  if(name==='wallpaper')restartWallpaper();
-  else if(wallpaperAnim){cancelAnimationFrame(wallpaperAnim);wallpaperAnim=null;}
+  if(name==='colourwheel'){setTimeout(()=>{initColourWheel();},50);}
+  // FIX #4: always cancel wallpaper anim when leaving, restart only when entering
+  if(name==='wallpaper'){restartWallpaper();}
+  else{if(wallpaperAnim){cancelAnimationFrame(wallpaperAnim);wallpaperAnim=null;}}
 }
 
 /* ════════════════ COPY / TOAST ════════════════ */
 function copyColor(hex){navigator.clipboard.writeText(hex.toUpperCase()).then(()=>showToast(`✓ Copied ${hex.toUpperCase()}`));}
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
 
+/* ════════════════ COLOUR WHEEL ════════════════ */
+let cwHue = 280, cwLight = 55, cwHarmony = 'analogous', cwColors = [], cwDragging = false;
+let cwCustomAngles = [0, 60, 120]; // for custom mode
+let cwDraggingDotIndex = null;
+let cwHarmonyConfig = {
+  analogous: 3,
+  complementary: 2,
+  split: 3,
+  triadic: 3,
+  square: 4,
+  compound: 3,
+  monochromatic: 3,
+  custom: { min: 2, max: 5, default: 3 }
+};
+
+const CW_HARMONIES = {
+  monochromatic:  (h) => [h, h, h],
+  analogous:      (h) => [(h - 30 + 360) % 360, h, (h + 30) % 360],
+  complementary:  (h) => [h, h, (h + 180) % 360],
+  split:          (h) => [h, (h + 150) % 360, (h + 210) % 360],
+  triadic:        (h) => [h, (h + 120) % 360, (h + 240) % 360],
+  square:         (h) => [h, (h + 90) % 360, (h + 180) % 360, (h + 270) % 360],
+  compound:       (h) => [h, (h + 30) % 360, (h + 180) % 360],
+  custom:         (h) => cwCustomAngles.map(a => (h + a) % 360)
+};
+
+// Build lightness array per harmony
+const CW_LIGHTS = {
+  monochromatic: (l) => [l - 20, l, l + 18],
+  analogous:     (l) => [l, l, l],
+  complementary: (l) => [l, l, l],
+  split:         (l) => [l, l, l],
+  triadic:       (l) => [l, l, l],
+  square:        (l) => [l, l, l, l],
+  compound:      (l) => [l, l, l],
+  custom:        (l) => cwCustomAngles.map(() => l)
+};
+
+function cwHslToHex(h, s, l) {
+  l = Math.max(10, Math.min(90, l));
+  s = Math.max(30, Math.min(100, s));
+  return hslToHex(h, s, l);
+}
+
+function computeCwColors() {
+  const hues = CW_HARMONIES[cwHarmony](cwHue);
+  const lights = CW_LIGHTS[cwHarmony](cwLight);
+  // For monochromatic vary saturation also
+  if (cwHarmony === 'monochromatic') {
+    cwColors = hues.map((h, i) => cwHslToHex(h, 80, lights[i]));
+  } else {
+    cwColors = hues.map((h, i) => cwHslToHex(h, 80, lights[i]));
+  }
+}
+
+function drawWheel() {
+  const canvas = document.getElementById('cwCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const size = canvas.width;
+  const cx = size / 2, cy = size / 2;
+  const outerR = size / 2 - 6;
+  const innerR = outerR * 0.36;
+
+  ctx.clearRect(0, 0, size, size);
+
+  // Draw hue ring
+  const segments = 360;
+  for (let i = 0; i < segments; i++) {
+    const startAngle = ((i - 0.5) / segments) * Math.PI * 2 - Math.PI / 2;
+    const endAngle = ((i + 0.5) / segments) * Math.PI * 2 - Math.PI / 2;
+    const grad = ctx.createRadialGradient(cx, cy, innerR, cx, cy, outerR);
+    grad.addColorStop(0, `hsla(${i}, 0%, 70%, 0)`);
+    grad.addColorStop(0.15, `hsla(${i}, 80%, ${cwLight}%, 0.7)`);
+    grad.addColorStop(1, `hsla(${i}, 90%, ${cwLight}%, 1)`);
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, outerR, startAngle, endAngle);
+    ctx.closePath();
+    ctx.fillStyle = grad;
+    ctx.fill();
+  }
+
+  // Soft inner circle overlay
+  const innerGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, innerR);
+  innerGrad.addColorStop(0, 'rgba(243,232,255,0.96)');
+  innerGrad.addColorStop(0.7, 'rgba(243,232,255,0.82)');
+  innerGrad.addColorStop(1, 'rgba(243,232,255,0)');
+  ctx.beginPath();
+  ctx.arc(cx, cy, innerR + 4, 0, Math.PI * 2);
+  ctx.fillStyle = innerGrad;
+  ctx.fill();
+
+  // Base colour preview in center
+  ctx.beginPath();
+  ctx.arc(cx, cy, innerR * 0.58, 0, Math.PI * 2);
+  ctx.fillStyle = cwHslToHex(cwHue, 80, cwLight);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc(cx, cy, innerR * 0.58, 0, Math.PI * 2);
+  ctx.strokeStyle = 'rgba(255,255,255,0.7)';
+  ctx.lineWidth = 3;
+  ctx.stroke();
+
+  // Draw harmony dots on wheel
+  const hues = CW_HARMONIES[cwHarmony](cwHue);
+  const dotR = (innerR + outerR) / 2;
+  hues.forEach((h, i) => {
+    const angle = (h / 360) * Math.PI * 2 - Math.PI / 2;
+    const x = cx + dotR * Math.cos(angle);
+    const y = cy + dotR * Math.sin(angle);
+    const col = cwColors[i] || cwHslToHex(h, 80, cwLight);
+
+    // Connector line
+    if (i > 0) {
+      const prevH = hues[0];
+      const pa = (prevH / 360) * Math.PI * 2 - Math.PI / 2;
+      const px = cx + dotR * Math.cos(pa);
+      const py = cy + dotR * Math.sin(pa);
+      ctx.beginPath();
+      ctx.moveTo(px, py);
+      ctx.lineTo(x, y);
+      ctx.strokeStyle = 'rgba(255,255,255,0.45)';
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([3, 4]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    // Dot
+    ctx.beginPath();
+    ctx.arc(x, y, i === 0 ? 11 : 8, 0, Math.PI * 2);
+    ctx.fillStyle = col;
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(x, y, i === 0 ? 11 : 8, 0, Math.PI * 2);
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = i === 0 ? 3 : 2.5;
+    ctx.stroke();
+    if (i === 0) {
+      ctx.beginPath();
+      ctx.arc(x, y, 14, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(168,85,247,0.5)';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    }
+  });
+}
+
+function updateCwUI() {
+  computeCwColors();
+  drawWheel();
+  
+  // Update canvas cursor for custom mode
+  const canvas = document.getElementById('cwCanvas');
+  if (canvas) {
+    canvas.classList.toggle('custom-mode', cwHarmony === 'custom');
+  }
+
+  // Palette bar
+  const bar = document.getElementById('cwPaletteBar');
+  const dots = document.getElementById('cwDotsRow');
+  if (bar) {
+    bar.innerHTML = cwColors.map((c, i) => {
+      const tc = parseInt(c.slice(1), 16) > 0x888888 ? '#1e0a3c' : '#fff';
+      return `<div class="cw-pal-swatch" style="background:${c}" onclick="navigator.clipboard.writeText('${c.toUpperCase()}').then(()=>showToast('✓ Copied ${c.toUpperCase()}'))">
+        <span class="cw-pal-hex" style="color:${tc}">${c.toUpperCase()}</span>
+      </div>`;
+    }).join('');
+  }
+  if (dots) {
+    dots.innerHTML = cwColors.map((c, i) =>
+      `<div class="cw-dot-item" onclick="navigator.clipboard.writeText('${c.toUpperCase()}').then(()=>showToast('✓ ${c.toUpperCase()}'))">
+        <div class="cw-dot-circle" style="background:${c}"></div>
+        <span class="cw-dot-hex">${c.toUpperCase().slice(1)}</span>
+      </div>`
+    ).join('');
+  }
+
+  // Info chips
+  const base = cwColors[cwHarmony === 'monochromatic' ? 1 : 0] || cwColors[0];
+  if (base) {
+    const {r,g,b} = hexToRgb(base);
+    const [h,s,l] = hexToHsl(base);
+    const hexEl = document.getElementById('cwChipHex');
+    const hslEl = document.getElementById('cwChipHsl');
+    const rgbEl = document.getElementById('cwChipRgb');
+    if (hexEl) hexEl.textContent = base.toUpperCase();
+    if (hslEl) hslEl.textContent = `${h}° ${s}% ${l}%`;
+    if (rgbEl) rgbEl.textContent = `${r},${g},${b}`;
+
+    // Update lightness slider gradient
+    const ls = document.getElementById('cwLightSlider');
+    if (ls) ls.style.background = `linear-gradient(to right,hsl(${cwHue},80%,15%),hsl(${cwHue},80%,50%),hsl(${cwHue},80%,90%))`;
+  }
+}
+
+function setCwHarmony(name, btn) {
+  cwHarmony = name;
+  document.querySelectorAll('.cw-harmony-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  // Reset custom angles if switching to custom
+  if (name === 'custom') cwCustomAngles = [0, 60, 120];
+  
+  // Show/hide custom controls
+  const customControls = document.getElementById('cwCustomControls');
+  if (customControls) {
+    customControls.style.display = name === 'custom' ? 'flex' : 'none';
+  }
+  
+  updateCwUI();
+}
+
+function setCwHue(val) {
+  cwHue = val;
+  document.getElementById('cwHueVal').textContent = val + '°';
+  updateCwUI();
+}
+
+function setCwLight(val) {
+  cwLight = val;
+  document.getElementById('cwLightVal').textContent = val + '%';
+  updateCwUI();
+}
+
+function cwCanvasClick(e) {
+  if (cwHarmony === 'custom') return; // Custom mode uses dragging instead
+  
+  const canvas = document.getElementById('cwCanvas');
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = canvas.width / rect.width;
+  const scaleY = canvas.height / rect.height;
+  const x = (e.clientX - rect.left) * scaleX - canvas.width / 2;
+  const y = (e.clientY - rect.top) * scaleY - canvas.height / 2;
+  const r = Math.sqrt(x * x + y * y);
+  const outerR = canvas.width / 2 - 6;
+  const innerR = outerR * 0.36;
+  if (r > innerR && r < outerR + 8) {
+    let angle = Math.atan2(y, x) + Math.PI / 2;
+    if (angle < 0) angle += Math.PI * 2;
+    cwHue = Math.round((angle / (Math.PI * 2)) * 360) % 360;
+    document.getElementById('cwHueSlider').value = cwHue;
+    document.getElementById('cwHueVal').textContent = cwHue + '°';
+    updateCwUI();
+  }
+}
+
+
+function cwCanvasMouseDown(e) {
+  if (cwHarmony !== 'custom') {
+    cwDragging = true;
+    cwCanvasClick(e);
+    return;
+  }
+  
+  const canvas = document.getElementById('cwCanvas');
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = canvas.width / rect.width;
+  const scaleY = canvas.height / rect.height;
+  const cx = canvas.width / 2;
+  const cy = canvas.height / 2;
+  const outerR = canvas.width / 2 - 6;
+  const innerR = outerR * 0.36;
+  const dotR = (innerR + outerR) / 2;
+  
+  const x = (e.clientX - rect.left) * scaleX - cx;
+  const y = (e.clientY - rect.top) * scaleY - cy;
+  
+  // Check if clicking on a dot
+  const dotHitRadius = 16;
+  const hues = CW_HARMONIES[cwHarmony](cwHue);
+  hues.forEach((h, i) => {
+    const angle = (h / 360) * Math.PI * 2 - Math.PI / 2;
+    const dx = dotR * Math.cos(angle);
+    const dy = dotR * Math.sin(angle);
+    const dist = Math.sqrt((x - dx) ** 2 + (y - dy) ** 2);
+    if (dist < dotHitRadius) {
+      cwDraggingDotIndex = i;
+    }
+  });
+  
+  if (cwDraggingDotIndex === null) {
+    cwDragging = true;
+    cwCanvasClick(e);
+  }
+}
+
+function cwCanvasMouseMove(e) {
+  if (cwDraggingDotIndex === null) {
+    if (cwDragging) cwCanvasClick(e);
+    return;
+  }
+  
+  const canvas = document.getElementById('cwCanvas');
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = canvas.width / rect.width;
+  const scaleY = canvas.height / rect.height;
+  const cx = canvas.width / 2;
+  const cy = canvas.height / 2;
+  
+  const x = (e.clientX - rect.left) * scaleX - cx;
+  const y = (e.clientY - rect.top) * scaleY - cy;
+  
+  const outerR = canvas.width / 2 - 6;
+  const innerR = outerR * 0.36;
+  const r = Math.sqrt(x * x + y * y);
+  const innerRMin = innerR * 0.36;
+  const outerRMax = outerR + 8;
+  
+  // Constrain to wheel ring
+  if (r >= innerRMin && r <= outerRMax) {
+    let angle = Math.atan2(y, x) + Math.PI / 2;
+    if (angle < 0) angle += Math.PI * 2;
+    const newHue = Math.round((angle / (Math.PI * 2)) * 360) % 360;
+    
+    // Update the custom angle for this dot
+    cwCustomAngles[cwDraggingDotIndex] = (newHue - cwHue + 360) % 360;
+    updateCwUI();
+  }
+}
+
+function cwCanvasMouseUp() {
+  cwDragging = false;
+  cwDraggingDotIndex = null;
+}
+
+function useCwPalette() {
+  if (!cwColors.length) return;
+  // Pad to 5 if fewer
+  let cols = [...cwColors];
+  while (cols.length < 5) cols.push(cols[cols.length - 1]);
+  cols = cols.slice(0, 5);
+  currentColors = cols;
+  render(cols);
+  switchTab('generate', document.querySelector('[data-tab="generate"]'));
+  showToast('✓ Colour Wheel palette applied!');
+}
+
+function initColourWheel() {
+  const canvas = document.getElementById('cwCanvas');
+  if (!canvas) return;
+  canvas.addEventListener('click', cwCanvasClick);
+  canvas.addEventListener('mousedown', cwCanvasMouseDown);
+  canvas.addEventListener('mousemove', cwCanvasMouseMove);
+  canvas.addEventListener('mouseup', cwCanvasMouseUp);
+  canvas.addEventListener('mouseleave', cwCanvasMouseUp);
+  canvas.addEventListener('touchstart', (e) => { cwCanvasMouseDown(e.touches[0]); }, {passive:true});
+  canvas.addEventListener('touchmove', (e) => { cwCanvasMouseMove(e.touches[0]); }, {passive:true});
+  canvas.addEventListener('touchend', cwCanvasMouseUp);
+  updateCwUI();
+}
+
+function addCwCustomColor() {
+  if (cwCustomAngles.length < cwHarmonyConfig.custom.max) {
+    // Add new color evenly spaced
+    const spacing = 360 / (cwCustomAngles.length + 1);
+    cwCustomAngles = cwCustomAngles.map((a, i) => a + spacing / 2).slice(0, cwCustomAngles.length);
+    cwCustomAngles.push(0);
+    cwCustomAngles.sort((a, b) => a - b);
+    updateCwUI();
+    showToast(`✓ Added color (${cwCustomAngles.length} total)`);
+  }
+}
+
+function removeCwCustomColor(index) {
+  if (cwCustomAngles.length > cwHarmonyConfig.custom.min) {
+    cwCustomAngles.splice(index, 1);
+    updateCwUI();
+    showToast(`✓ Removed color (${cwCustomAngles.length} total)`);
+  }
+}
+
+function resetCwCustomAngles() {
+  cwCustomAngles = [0, 60, 120];
+  updateCwUI();
+  showToast('✓ Custom colors reset');
+}
+
 /* ════════════════ INIT ════════════════ */
 applyColor('#a855f7');
 initBuilder();
 renderSaved();
 initWallpaper();
+initColourWheel();
+
 </script>
 </body>
 </html>
