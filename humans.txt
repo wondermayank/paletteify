@@ -1,0 +1,27 @@
+/* TEAM */
+
+  Creator & Developer: Mayank (Thunder Technology)
+  GitHub:              https://github.com/wondermayank
+  YouTube:             https://www.youtube.com/@thundertechnologyofficial
+  Instagram:           https://www.instagram.com/thundertechnologyofficial
+  Location:            India
+
+/* THANKS */
+
+  Google Fonts — for Outfit, Cormorant Garamond, DM Mono
+  The open-source colour theory community
+  Everyone who uses Palettify and shares their palettes
+
+/* SITE */
+
+  Last update:    2025-07-01
+  Language:       English (en-IN)
+  Doctype:        HTML5
+  IDE:            VS Code
+  Hosted on:      GitHub Pages
+  Standards:      WCAG 2.1, Schema.org, Open Graph, Twitter Card
+
+  Palettify is a free, no-login colour palette generator.
+  Built with love for designers, developers, and artists everywhere.
+
+  https://wondermayank.github.io/palettify/
