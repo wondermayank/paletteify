@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+  <!-- ══ Main Application ══ -->
+  <url>
+    <loc>https://wondermayank.github.io/palettify/</loc>
+    <lastmod>2025-07-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://wondermayank.github.io/palettify/"/>
+    <image:image>
+      <image:loc>https://wondermayank.github.io/palettify/assets/og-image.png</image:loc>
+      <image:title>Palettify — Free Colour Palette Generator by Thunder Technology</image:title>
+      <image:caption>Palettify colour palette generator interface showing vibrant colour swatches</image:caption>
+    </image:image>
+  </url>
+
+  <!-- ══ Supplementary / Crawlable Files ══ -->
+  <url>
+    <loc>https://wondermayank.github.io/palettify/llms.txt</loc>
+    <lastmod>2025-07-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <url>
+    <loc>https://wondermayank.github.io/palettify/humans.txt</loc>
+    <lastmod>2025-07-01</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.2</priority>
+  </url>
+
+  <url>
+    <loc>https://wondermayank.github.io/palettify/ai.txt</loc>
+    <lastmod>2025-07-01</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.2</priority>
+  </url>
+
+</urlset>
