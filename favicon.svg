@@ -1,46 +1,11 @@
-# Futuristic Colour Palette Website – Favicon SVG
-
-```svg
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
-  <defs>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" width="64" height="64"><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/"><rdf:Description><dc:creator>RealFaviconGenerator</dc:creator><dc:source>https://realfavicongenerator.net</dc:source></rdf:Description></rdf:RDF></metadata><link rel="icon" type="image/svg+xml" href="/favicon.svg"></link><defs>
     <linearGradient id="bg" x1="0" y1="0" x2="64" y2="64">
-      <stop offset="0%" stop-color="#C4B5FD"/>
-      <stop offset="100%" stop-color="#8B5CF6"/>
+      <stop offset="0%" stop-color="#C4B5FD"></stop>
+      <stop offset="100%" stop-color="#8B5CF6"></stop>
     </linearGradient>
 
     <linearGradient id="ring" x1="10" y1="10" x2="54" y2="54">
-      <stop offset="0%" stop-color="#FFFFFF"/>
-      <stop offset="100%" stop-color="#E9D5FF"/>
+      <stop offset="0%" stop-color="#FFFFFF"></stop>
+      <stop offset="100%" stop-color="#E9D5FF"></stop>
     </linearGradient>
-  </defs>
-
-  <!-- Background -->
-  <rect width="64" height="64" rx="20" fill="url(#bg)"/>
-
-  <!-- Futuristic palette ring -->
-  <circle cx="32" cy="32" r="18" stroke="url(#ring)" stroke-width="6" opacity="0.95"/>
-
-  <!-- Color nodes -->
-  <circle cx="32" cy="12" r="4" fill="#FFFFFF"/>
-  <circle cx="50" cy="32" r="4" fill="#F3E8FF"/>
-  <circle cx="32" cy="52" r="4" fill="#DDD6FE"/>
-  <circle cx="14" cy="32" r="4" fill="#FFFFFF" opacity="0.9"/>
-
-  <!-- Center glow -->
-  <circle cx="32" cy="32" r="6" fill="#FFFFFF" opacity="0.95"/>
-</svg>
-```
-
-## How to Use
-
-Save this as:
-
-```bash
-favicon.svg
-```
-
-Then add this inside your website `<head>`:
-
-```html
-<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-```
+  </defs><rect width="64" height="64" rx="20" fill="url(#bg)"></rect><circle cx="32" cy="32" r="18" stroke="url(#ring)" stroke-width="6" opacity="0.95"></circle><circle cx="32" cy="12" r="4" fill="#FFFFFF"></circle><circle cx="50" cy="32" r="4" fill="#F3E8FF"></circle><circle cx="32" cy="52" r="4" fill="#DDD6FE"></circle><circle cx="14" cy="32" r="4" fill="#FFFFFF" opacity="0.9"></circle><circle cx="32" cy="32" r="6" fill="#FFFFFF" opacity="0.95"></circle></svg>
