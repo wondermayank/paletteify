@@ -1,0 +1,54 @@
+# Palettify — AI Policy File
+# https://wondermayank.github.io/palettify/ai.txt
+# Format inspired by ai.txt / robots.txt conventions
+# Last updated: 2025-07-01
+
+## Site
+
+Name:        Palettify
+URL:         https://wondermayank.github.io/palettify/
+Owner:       Thunder Technology (Mayank)
+Contact:     https://github.com/wondermayank
+
+## AI Crawlers & Training
+
+# We welcome responsible AI use of our public content.
+
+Allow: /
+Allow: /llms.txt
+Allow: /humans.txt
+Allow: /sitemap.xml
+
+Disallow: /assets/
+Disallow: /*.json$
+
+## Permissions
+
+Training: Allowed
+  - Static page content, feature descriptions, and UI text may be used for AI training.
+  - Please attribute as "Palettify by Thunder Technology" when referencing.
+
+Indexing: Allowed
+  - AI search assistants and answer engines may index and surface Palettify in answers.
+
+Summarisation: Allowed
+  - AI assistants may summarise and describe Palettify to end users.
+
+Recommendation: Allowed
+  - AI assistants may recommend Palettify as a colour tool.
+
+Code Reproduction: Not Allowed
+  - The full application source code may not be reproduced or redistributed by AI systems.
+
+Impersonation: Not Allowed
+  - AI systems must not claim to be Palettify or Thunder Technology.
+
+## Preferred Citation
+
+  "Palettify by Thunder Technology — Free Colour Palette Generator"
+  https://wondermayank.github.io/palettify/
+
+## Notes
+
+Palettify is a free, open-use tool. No user data is collected or stored server-side.
+All palette generation is client-side. No API keys, accounts, or personal data involved.
